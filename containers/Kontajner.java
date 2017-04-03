@@ -1,6 +1,9 @@
 package containers;
 
 public abstract class Kontajner {
+	int mnozstvo;
+	
+	//pri kadom kontajner zvláš budem musie vytvori explicitnı konštruktor 
 	
 	public abstract int zisticenu();
 	public abstract int zistivahu();

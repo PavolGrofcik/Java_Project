@@ -12,43 +12,37 @@ import javafx.scene.text.Font;
 
 
 public  class Main extends Application {
-	private Button next = new Button("Vytvor Objednavku");					//deklarácia nového tlaèidla "next"
+	private Button next = new Button("Vytvori Objednávku");						//deklarácia nového tlaèidla "next"
 	private Button exit = new Button("Ukonèi");
 	public Label pozdrav = new Label();
 	
 	@Override
 	public  void start(Stage primaryStage) {
 		try {
-			
-			
-			
+	
 			Pane root = new Pane();
-			
-		
-	        
-			root.getChildren().addAll(next,exit,pozdrav);							//pridanie nového tlaèidla (funkcia)
+	
+			root.getChildren().addAll(next,exit,pozdrav);							//pridanie tlaèidiel na stage
 			next.setOnAction(e->new Druhé());	
-			next.setTranslateX(0);
-			next.setTranslateY(0);
+			next.setTranslateX(150);
+			next.setTranslateY(50);
 			
 			pozdrav.setText("Vitajte");
 			pozdrav.setTextFill(Color.rgb(245, 61, 0));
 			pozdrav.setFont(Font.font("Cambria", 40));
 			pozdrav.setAlignment(Pos.CENTER);
-			pozdrav.setTranslateX(150);
+			pozdrav.setTranslateX(155);
 			pozdrav.setTranslateY(160);
-			
-			
-			
-			exit.setPrefSize(75,20);										//pozícia tlaèidla exit
-			exit.setTranslateX(215);
+						
+			exit.setPrefSize(75,20);												//pozícia tlaèidla exit
+			exit.setTranslateX(180);
 			exit.setTranslateY(360);
 
-			//exit.setLayoutX(50);											//	SetLayout nefunguje ???
+			//exit.setLayoutX(50);													//	SetLayout nefunguje ???
 			//exit.setLayoutX(50);
 			exit.setOnAction(e->{
 				primaryStage.close();
-				//System.exit(0);											//nastavenie tlaèidla exit aby ukonèil CELÝ program!
+				//System.exit(0);													//nastavenie tlaèidla exit aby ukonèil CELÝ program!
 			});
 			
 			primaryStage.setTitle("Zadaj Objednávku");//

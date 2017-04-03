@@ -1,8 +1,5 @@
 package kamióny;
 
-public class Avia {
+public class Avia extends Auto {
 
-	int cas;			//ako rýchlo
-	double transport;	//plus cena
-	
 }

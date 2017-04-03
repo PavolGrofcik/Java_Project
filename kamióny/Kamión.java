@@ -1,8 +1,7 @@
 package kamióny;
 
-public class Kamión extends Avia{
+public class Kamión extends Auto{
 
-	int nosnost;
 	
 	
 }
