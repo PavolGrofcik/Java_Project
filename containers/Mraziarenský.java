@@ -1,47 +1,74 @@
 package containers;
 
-public class Mraziarenský extends Kontajner {
+public class Mraziarenský extends Kontajner implements Atributy {
 
-	private int cena;
-	private final int vaha = 2500;			//kg
-	private  int zaruka =0;					//roky
-	private final int vyrobnycas=250;		//hodiny
-											// 1 true - potravinarsky, 2 false iný chemicky...
+	private int range;
+	private String name;
 	
+	private final int zaruka = 8;
+	private final int hmotnost = 3000;						
+	
+	
+	public Mraziarenský(int num) {		
+		nastavCenu(num);
+		nastavProdT(num);
+	}
+	
+
 	@Override
-	public int zisticenu() {
-		// TODO Auto-generated method stub
-		return this.cena;
+	public int zistiHmotnost(){
+		return this.hmotnost;
 	}
 
 	@Override
-	public int zistivahu() {
-		// TODO Auto-generated method stub
-		return this.vaha;
-	}
-
-	@Override
-	public int zistizaruku() {
-		// TODO Auto-generated method stub
+	public int zistiZaruku() {
 		return this.zaruka;
 	}
 
 	@Override
-	public int zisticas() {
-		// TODO Auto-generated method stub
-		return this.vyrobnycas;
+	public int zistiCas() {
+		return this.prodtime;
 	}
 
 	@Override
-	public void nastavcenu(int mnozstvo) {
-		this.cena=vyrobnycas*10*mnozstvo;
+	public void nastavCenu(int mnozstvo) {
+		if(mnozstvo>7){
+			cena=2000;
+		}
+		else{
+			cena=2500;
+		}
+	}
+	
+	public void nastavProdT(int mnozstvo){										//podla množstva sa urèuje aj èas na produkciu jednotlivých kontajnerov, èím viac tým rýchlejšie
+		if (mnozstvo>10) {
+			this.prodtime=80;
+		}
+		else {
+			this.prodtime=100;
+		}
+	}
+	
+	public void nastavRange(int range){
+		if (range<0 || range >30) {
+			return;
+		}
+		else{
+			if (range<15) {
+				this.range=range;
+				this.name="Potravinársky";
+			}
+			else{
+				this.range=range;
+				this.name="Hlbokomraziarensky";
+			}
+			
+		}
 		
 	}
 
-	@Override
-	public void nastavzaruku(int pocet) {
-		this.zaruka=5;
-		
-	}
+
+
+
 
 }

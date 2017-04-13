@@ -1,49 +1,61 @@
 package containers;
 
-public class Transportný extends Kontajner {
-
-	private int cena;
-	private final int vaha = 1000;			//kg
-	private  int zaruka =0;					//roky
-	private final int vyrobnycas=100;		//hodiny
+public class Transportný extends Kontajner implements Atributy {
 	
-	@Override
-	public int zisticenu() {
-		return cena;
+	private final int hmotnost = 1000;			//kg
+	private  int zaruka =5;		
+
+	private int nosnost;
+	
+	public Transportný(int num){
+		nastavCenu(num);
+		nastavProdT(num);
+	}
+	
+	
+	
+
+	public int zistiZaruku() {
+		return this.zaruka;
 	}
 
-	@Override
-	public int zistivahu() {
-		return vaha;
-	}
-
-	@Override
-	public int zistizaruku() {
-		return zaruka;
-	}
-
-	@Override
-	public int zisticas() {
-		return vyrobnycas;
-	}
-
-	@Override
-	public void nastavcenu(int mnozstvo) {
-		this.cena=mnozstvo*1000;
-
-		
-	}
-
-	@Override
-	public void nastavzaruku(int pocet){
-		if (pocet>20) {
-			this.zaruka=10;
-			
+	public void nastavProdT(int mnozstvo){										//podla množstva sa urèuje aj èas na produkciu jednotlivých kontajnerov, èím viac tým rýchlejšie
+		if (mnozstvo>10) {
+			this.prodtime=75;
 		}
 		else {
-			this.zaruka=7;
+			this.prodtime=100;
 		}
-		
 	}
+	
+	@Override
+	public int zistiCas() {
+		return this.prodtime;
+	}
+
+	@Override
+	public void nastavCenu(int mnozstvo) {										//poskytuje zlavu 33% ak objednávka presahuje viac ako 10 položiek
+		if (mnozstvo>10) {
+			this.cena=1000;												
+		}
+		else
+		this.cena=1500;		
+	}
+	
+
+	public int zistiHmotnost(){
+		return this.hmotnost;
+	}
+	
+	public void nastavNosnost(int vaha){
+		if (vaha<5000) {
+			this.nosnost=vaha;
+		}
+	}
+	
+	public int zistiNosnost(){
+		return this.nosnost;
+	}
+
 
 }

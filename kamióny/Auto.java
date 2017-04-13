@@ -1,5 +1,7 @@
 package kamióny;
 
+import containers.Kontajner;
+
 public class Auto {
 
 	private int nosnost;
@@ -10,12 +12,18 @@ public class Auto {
 		this.cas=time;
 	}
 	
-	public int getcas(){
+	public int zistiCas(){
 		return cas;
 	}
 	
-	public int getnosnost(){
+	public int zistiNosnost(){
 		return nosnost;
+	}
+	
+	public void nalozAuto(Kontajner kontajner){
+		
+		this.nosnost=1;
+		
 	}
 	
 }

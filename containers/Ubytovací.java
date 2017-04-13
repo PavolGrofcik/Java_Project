@@ -1,41 +1,59 @@
 package containers;
 
+
 public class Ubytovací extends Kontajner {
+	
+	private final int hmotnost = 5000;			//kg
+	private  int zaruka =10;					//roky
+	
+	private int velkost;
 
-	@Override
-	public int zisticenu() {
-		// TODO Auto-generated method stub
-		return 0;
+
+	public Ubytovací(int num) {
+		nastavCenu(num);
+		nastavProdT(num);
 	}
 
 	@Override
-	public int zistivahu() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int zistiZaruku() {
+		return this.zaruka;
 	}
 
 	@Override
-	public int zistizaruku() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int zistiCas() {
+		return this.prodtime;
 	}
 
 	@Override
-	public int zisticas() {
-		// TODO Auto-generated method stub
-		return 0;
+	public void nastavCenu(int mnozstvo) {
+		if(mnozstvo>5){
+			cena=2500;			//+ zisti velkost
+		}
+		else{
+			cena=3000;
+		}
+	}
+	
+	public void nastavProdT(int mnozstvo){										//podla množstva sa urèuje aj èas na produkciu jednotlivých kontajnerov, èím viac tým rýchlejšie
+		if (mnozstvo>10) {
+			this.prodtime=100;
+		}
+		else {
+			this.prodtime=125;
+		}
 	}
 
 	@Override
-	public void nastavcenu(int mnozstvo) {
-		// TODO Auto-generated method stub
-		
+	public int zistiHmotnost() {
+		return this.hmotnost;
 	}
-
-	@Override
-	public void nastavzaruku(int pocet) {
-		// TODO Auto-generated method stub
-		
+	
+	public int zistiVelkost(){
+		return this.velkost;
+	}
+	
+	public void nastavVelkost(int velky){
+		this.velkost=velky;
 	}
 
 }
