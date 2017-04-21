@@ -28,13 +28,14 @@ public class Kamión extends Auto{
 		}
 		else {
 			this.nalozeny=true;
-					
+			
 		}
 	}
+	
+	
 	
 	
 	public boolean zistiNaklad(){
 		return this.nalozeny;
 	}
-	
 }

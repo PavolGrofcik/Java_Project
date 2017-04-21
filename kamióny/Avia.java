@@ -13,6 +13,7 @@ public class Avia extends Auto {
 	
 	
 	public void nalozAuto(Kontajner kontajner){
+		super.nalozAuto(kontajner);
 		nalozeny=true;
 	}
 	

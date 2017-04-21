@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -14,9 +16,11 @@ import javafx.scene.text.Font;
 
 
 public  class Main extends Application {
+	
 	private Button next = new Button("Vytvoriù Objedn·vku");						//deklar·cia novÈho tlaËidla "next"
 	private Button exit = new Button("UkonËi");
-	private Label pozdrav = new Label("Celkov· cena");
+	private Label pozdrav = new Label();
+	
 	
 	@Override
 	public  void start(Stage primaryStage) {
@@ -27,25 +31,29 @@ public  class Main extends Application {
 			root.getChildren().addAll(pozdrav,next,exit);							//pridanie tlaËidiel na stage
 			root.setAlignment(Pos.BASELINE_CENTER);
 			
-			next.setOnAction(e->new DruhÈ());	
+			next.setOnAction(e->{
+				new DruhÈ();
+				primaryStage.close();
+				});	
 			
 			pozdrav.setText("Vitajte!");
 			pozdrav.setTextFill(Color.rgb(245, 61, 0));
 			pozdrav.setFont(Font.font("Cambria", 40));
 			pozdrav.setAlignment(Pos.CENTER);
 						
-			exit.setPrefSize(75,20);												//pozÌcia tlaËidla exit
-
-			exit.setOnAction(e->{
-				primaryStage.close();
-				//System.exit(0);													//nastavenie tlaËidla exit aby ukonËil CEL› program!
+			exit.setPrefSize(75,20);												
+			exit.setOnAction(e->{													//ukonËenie programu
+				Alert cancel = new Alert(AlertType.CONFIRMATION);
+				cancel.setTitle("UkonËiù?");
+				cancel.setHeaderText("UkonËiù objedn·vku?");
+				cancel.setContentText("Objedn·vka nebude uloûen·");
 			});
 			
 			primaryStage.setTitle("Zadaj Objedn·vku");//
 			Scene scene = new Scene(root,470,450);
+			primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/icon.jpg")));			//nastavenie ikony  skrz resource package
 			primaryStage.setScene(scene);
 			primaryStage.show();
-			primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/icon.jpg")));			//nastavenie ikony  skrz resource package
 					
 			
 		} catch(Exception e) {

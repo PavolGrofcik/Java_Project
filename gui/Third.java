@@ -2,11 +2,12 @@ package gui;
 
 import java.io.File;
 import java.io.IOException;
-import containers.Arraylist;
+import containers.Objednávka;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -19,9 +20,9 @@ public class Third extends Stage {
 		private Label label3 = new Label("Dni výroby");
 		private Label label2 = new Label("Celkový èas výroby");
 		private Label label = new Label("Celková cena: ");
-		
+		//private TextField textField = new TextField("Hello");
 	
-	public Third(Arraylist list){																//parametrom je arralist s objektami rôznych kontajnerov, v tejto èasti sa dokonèí objednávka: t.j zistí celkové ceny, èas...
+	public Third(Objednávka list){																//parametrom je arralist s objektami rôznych kontajnerov, v tejto èasti sa dokonèí objednávka: t.j zistí celkové ceny, èas...
 		super();
 		
 		GridPane third = new GridPane();
@@ -40,7 +41,7 @@ public class Third extends Stage {
 		third.setConstraints(zistidni, 0, 3);
 		third.setConstraints(label3, 1, 3);
 		third.setConstraints(nacitaj, 0, 4);
-		
+		//third.setConstraints(textField, 0, 5);
 		
 		
 		zistiCenu.setOnAction(e->{																//Funkcia zistí celkovú cenu kontajnerov

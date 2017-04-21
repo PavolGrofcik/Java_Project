@@ -9,9 +9,39 @@ public class Mraziarenskı extends Kontajner implements Atributy {
 	private final int hmotnost = 3000;						
 	
 	
+	//preaenie
 	public Mraziarenskı(int num) {		
 		nastavCenu(num);
 		nastavProdT(num);
+	}
+	
+	//preaenie
+	public Mraziarenskı(String typ, int pocet, int rozsah) {
+		//this.name=typ;	urèí sa automaticky podla hodnoty rozsahu
+		this.range=rozsah;
+		if (rozsah>15) {
+			this.name="Hlbokomraziarenskı";							//podla rozsahu teploty sa automaticky vygeneruje èi je chladiaci/hlbokomraziarensky
+		}
+		else{
+			this.name="Chladiaci";
+		}
+
+		nastavCenu(pocet);
+		nastavProdT(pocet);
+	}
+	//preaenie
+	public Mraziarenskı(String typ, int pocet) {
+		this.name=typ;
+		
+		if (typ.equals("Chladiaci")) {
+			this.range=15;
+		}
+		else{
+			this.range=29;
+		}
+		nastavCenu(pocet);
+		nastavProdT(pocet);
+		
 	}
 	
 
@@ -54,13 +84,13 @@ public class Mraziarenskı extends Kontajner implements Atributy {
 			return;
 		}
 		else{
-			if (range<15) {
+			if (range>15) {
 				this.range=range;
-				this.name="Potravinársky";
+				this.name="Hlbokomraziarenskı";
 			}
 			else{
 				this.range=range;
-				this.name="Hlbokomraziarensky";
+				this.name="Chladiaci";
 			}
 			
 		}

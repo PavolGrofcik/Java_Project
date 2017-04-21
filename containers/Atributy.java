@@ -6,5 +6,6 @@ public interface Atributy {
 	public void nastavCenu(int mnozstvo);
 	public int zistiZaruku();
 	public int zistiHmotnost();
+
 	
 }

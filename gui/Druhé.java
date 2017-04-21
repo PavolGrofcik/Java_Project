@@ -12,14 +12,14 @@ import javafx.scene.text.Font;
 import javafx.stage.*;
 
 public class Druhé extends Stage {
-	private Arraylist myList = new Arraylist(); // trieda Arraylist ktora ukladá
+	private Objednávka objednávka = new Objednávka(); // trieda Controller ktora ukladá
 												// kontajnery do ArrayList-u
 
 	private Label lbl1 = new Label("Druhy kontajnerov");
 	private TextField txt1 = new TextField();
 	private Button zistipoèet = new Button("Zisti poèet");
-	private Button vytvor = new Button("Pridaj");
-	private Button back = new Button("Spä");
+	private Button pridaj = new Button("Pridaj");
+	private Button back = new Button("Ukonèi");
 	private Button delete = new Button("Zmaž položky");
 	private Button nextScene = new Button("Dokonèi objednávku");
 	private Button saveFile = new Button("Ulož objednávku");
@@ -46,7 +46,7 @@ public class Druhé extends Stage {
 		setTitle("Objednávka");
 		initModality(Modality.APPLICATION_MODAL);																	//zamkne okno
 		
-		root.getChildren().addAll(lbl1, box, txt1, vytvor, zistipoèet, delete,saveFile,nextScene,back);				//pridanie tlaèidiel
+		root.getChildren().addAll(lbl1, box, txt1, pridaj, zistipoèet, delete,saveFile,nextScene,back);				//pridanie tlaèidiel
 		root.setAlignment(Pos.CENTER);
 		Scene scene = new Scene(root, 450, 450); 
 		setScene(scene);
@@ -68,9 +68,10 @@ public class Druhé extends Stage {
 		txt1.setTranslateY(0);
 		txt1.setAlignment(Pos.CENTER); //nastavenie prompt textu do pozície CENTER
 		txt1.setPromptText("Zadajte poèet a vyberte druh kontajnera");
+		
 
-		vytvor.setTranslateX(180);
-		vytvor.setPrefSize(75, 25);
+		pridaj.setTranslateX(180);
+		pridaj.setPrefSize(75, 25);
 		
 		delete.setTranslateX(180);
 		
@@ -85,12 +86,16 @@ public class Druhé extends Stage {
 
 		box.getItems().addAll("Transportný", "Mraziarenský", "Ubytovací", "Nádrž");
 
-		vytvor.setOnAction(e -> {																				 		// Inicializacia tlacidla VYTVOR
+		pridaj.setOnAction(e -> {																				 		// Inicializacia tlacidla VYTVOR
 
 			try {
 				lbl1.setText("Zadaj poèet Kontajnerov");
-				myList.addmyList(Integer.parseInt(txt1.getText()),
+				/*objednávka.addmyList(Integer.parseInt(txt1.getText()),
 						box.getSelectionModel().getSelectedItem().toString());
+						*/
+				if(box.getSelectionModel().getSelectedItem().equals("Mraziarenský")){
+					new MrazStage(objednávka);
+				}
 				txt1.clear();																							//nastaví pôvodný promptText
 
 			} catch (Exception e2) {
@@ -107,12 +112,12 @@ public class Druhé extends Stage {
 		});
 	
 		delete.setOnAction(e->{											//Funkcia pre tlaèidlo Zmaž -> zmaže všetky položky v arrayList-e
-			myList.zmaž();
+			objednávka.zmaž();
 		});
 		
 		zistipoèet.setOnAction(e->{										//Funkcia zisti cenu
 			try {
-				lbl1.setText("Poèet-" + Integer.toString(myList.zistiPoèet()));
+				lbl1.setText("Poèet-" + Integer.toString(objednávka.zistiPoèet()));
 
 			} catch (Exception except) {
 
@@ -125,19 +130,21 @@ public class Druhé extends Stage {
 		});
 		
 		saveFile.setOnAction(e->{
+			/*
 			FileChooser fc = new FileChooser();
   			fc.setTitle("Uloži ako");
   			File f = fc.showSaveDialog(this);
 
 			try {
-				myList.uloz(f);
+				objednávka.uloz(f);
 			} catch ( Exception e1) {
 				// TODO Auto-generated catch block
 				//e1.printStackTrace();
-			}
+			}*/
+			new MrazStage(objednávka);
 		});
 		
-		nextScene.setOnAction(e-> new Third(myList));
+		nextScene.setOnAction(e-> new Third(objednávka));
 		
 		
 		back.setOnAction(e -> { // Funkcia vracajúca hlavne okno
