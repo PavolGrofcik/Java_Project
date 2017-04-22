@@ -2,11 +2,12 @@ package gui;
 
 import java.util.Optional;
 
-import containers.Objedn·vka;
+import controller.Objedn·vka;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
@@ -14,9 +15,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;								//Aby si mohol prid·vaù textfieldy tak musÌö importovaù presne tento import!! nie java.textfield.awt
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 
 
 public class MrazStage extends Stage {
@@ -36,14 +38,17 @@ public class MrazStage extends Stage {
 
 		VBox root = new VBox(5);
 		
+		root.getChildren().addAll(specs,box,field,checkBox,field2,vytvor,notification,koniec);
+		
 		root.setAlignment(Pos.BASELINE_CENTER);
 		setTitle("Mraziarensk˝");								
 		initModality(Modality.APPLICATION_MODAL);
 		
+		box.getItems().addAll("Chladiaci", "Hlbokomraziarensk˝");												//naplnenie ComboBoxa items
 		
-		root.getChildren().addAll(specs,box,field,checkBox,field2,vytvor,notification,koniec);
-		
-		box.getItems().addAll("Chladiaci", "Hlbokomraziarensk˝");			//naplnenie ComboBoxa items
+		specs.setFont(Font.font("Cambria", 20));
+		specs.setTextFill(Color.DARKORANGE);
+			
 		
 		field.setPromptText("Zadajte mnoûstvo");
 		field.setAlignment(Pos.CENTER);
@@ -54,9 +59,9 @@ public class MrazStage extends Stage {
 		field2.setEditable(false);
 		field2.setAlignment(Pos.CENTER);
 		
-		checkBox.setSelected(false);										//nastavÌme default hodnotu pre checkbox
+		checkBox.setSelected(false);																		//nastavÌme default hodnotu pre checkbox
 		
-		checkBox.setOnAction(e->{											//priradenie akcie pre Checkbox ak je selected tak sa zjavÌ textField2, aby program dod·val viac flexibilnosti pre uûÌvateæa
+		checkBox.setOnAction(e->{						//priradenie akcie pre Checkbox ak je selected tak sa zjavÌ textField2, aby program dod·val viac flexibilnosti pre uûÌvateæa
 			if(checkBox.isSelected()){
 				field2.setVisible(true);
 				field2.setEditable(true);
@@ -102,7 +107,7 @@ public class MrazStage extends Stage {
 				Alert alert1 = new Alert(AlertType.ERROR);
 				alert1.setTitle("Chyba");
 				alert1.setHeaderText("Error");
-				alert1.setContentText("Nevyplnili ste niektorÈ polia");								//Alert pre vöeobecnÈ bugs Exception
+				alert1.setContentText("Nevyplnili ste niektorÈ polia");									//Alert pre vöeobecnÈ bugs Exception
 				alert1.show();
 			}
 		});
@@ -116,25 +121,25 @@ public class MrazStage extends Stage {
 			Alert info = new Alert(AlertType.CONFIRMATION);
 			info.setTitle("UkonËiù?");
 			info.setHeaderText("Chcete uloûiù a vr·tiù sa spaù?");
-			info.setContentText("Vyberte moûnosù");
+			info.setContentText("Zvoæte moûnosù");
 
 			Optional<ButtonType> result = info.showAndWait();
 
-			if (result.get() == buttonOk.OK) {
+			if (result.get() == ButtonType.OK) {
 				// skrytie okna
-				notification.setText("Zadajte poloûky");
 				info.close();
-				hide();
+				hide();																					//hide() je ekvivalentnÈ ku close() from docs.oracle...
 
-			} else if (result.get() == buttonCancel.CANCEL) {
+			} else if (result.get() == ButtonType.CANCEL) {
 				// okno zost·va nezmenenÈ
 				notification.setText("Zadajte poloûky");
 				info.close();
 			}
 
-		});																//vr·ti sa sp‰ù ku pÙvodnÈmu oknu
+		});																								//vr·ti sa sp‰ù ku pÙvodnÈmu oknu
 		
 		Scene scene = new Scene(root, 250,250);
+		getIcons().add(new Image(getClass().getResourceAsStream("/resources/icon.jpg")));
 		setResizable(false);
 		setScene(scene);
 		show();

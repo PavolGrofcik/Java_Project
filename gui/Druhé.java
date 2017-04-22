@@ -1,20 +1,21 @@
 package gui;
 
 
-import java.io.File;
 import containers.*;
+import controller.Objednávka;
+import controller.Poèet;
 import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.*;
 
 public class Druhé extends Stage {
-	private Objednávka objednávka = new Objednávka(); // trieda Controller ktora ukladá
+	//private Objednávka objednávka = new Objednávka(); // trieda Controller ktora ukladá
 												// kontajnery do ArrayList-u
-
 	private Label lbl1 = new Label("Druhy kontajnerov");
 	private TextField txt1 = new TextField();
 	private Button zistipoèet = new Button("Zisti poèet");
@@ -25,7 +26,8 @@ public class Druhé extends Stage {
 	private Button saveFile = new Button("Ulož objednávku");
 	private ComboBox<String> box = new ComboBox<String>();
 	
-	
+	private Poèet poèet;
+	private Objednávka objednávka;
 	/*
 	Pomocná funkcia na vytvorenie Buttonons
 	*/
@@ -39,22 +41,16 @@ public class Druhé extends Stage {
 		
 	}
 	
-	public Druhé() {
+	public Druhé(Objednávka pom) {
 		super(); 
-
+		this.objednávka=pom;
 		VBox root = new VBox(5);
 		setTitle("Objednávka");
 		initModality(Modality.APPLICATION_MODAL);																	//zamkne okno
 		
 		root.getChildren().addAll(lbl1, box, txt1, pridaj, zistipoèet, delete,saveFile,nextScene,back);				//pridanie tlaèidiel
 		root.setAlignment(Pos.CENTER);
-		Scene scene = new Scene(root, 450, 450); 
-		setScene(scene);
-		show(); 
 		
-		
-	
-		//listview.setPrefHeight(215);
 		
 		lbl1.setPrefHeight(20);
 		lbl1.setTranslateX(0);
@@ -68,6 +64,9 @@ public class Druhé extends Stage {
 		txt1.setTranslateY(0);
 		txt1.setAlignment(Pos.CENTER); //nastavenie prompt textu do pozície CENTER
 		txt1.setPromptText("Zadajte poèet a vyberte druh kontajnera");
+		poèet = new Poèet(objednávka);
+		objednávka.pridajSledovatela(poèet);
+		root.getChildren().add(poèet);
 		
 
 		pridaj.setTranslateX(180);
@@ -95,6 +94,10 @@ public class Druhé extends Stage {
 						*/
 				if(box.getSelectionModel().getSelectedItem().equals("Mraziarenský")){
 					new MrazStage(objednávka);
+				}
+				else if(box.getSelectionModel().getSelectedItem().equals("Transportný")){
+					new TranStage(objednávka);
+					
 				}
 				txt1.clear();																							//nastaví pôvodný promptText
 
@@ -144,12 +147,20 @@ public class Druhé extends Stage {
 			new MrazStage(objednávka);
 		});
 		
-		nextScene.setOnAction(e-> new Third(objednávka));
+		nextScene.setOnAction(e-> {										//ukonèenie aktuálneho frame-u a preskoèenie do Third
+		new Third(objednávka);
+		hide();	
+		});
 		
 		
 		back.setOnAction(e -> { // Funkcia vracajúca hlavne okno
 			close();
 		});
+		
+		getIcons().add(new Image(getClass().getResourceAsStream("/resources/icon.jpg")));
+		Scene scene = new Scene(root, 450, 450); 
+		setScene(scene);
+		show(); 
 
 	}
 

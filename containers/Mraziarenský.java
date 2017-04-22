@@ -16,8 +16,7 @@ public class Mraziarenský extends Kontajner implements Atributy {
 	}
 	
 	//preaženie
-	public Mraziarenský(String typ, int pocet, int rozsah) {
-		//this.name=typ;	urèí sa automaticky podla hodnoty rozsahu
+	public Mraziarenský(String typ, int pocet, int rozsah){
 		this.range=rozsah;
 		if (rozsah>15) {
 			this.name="Hlbokomraziarenský";							//podla rozsahu teploty sa automaticky vygeneruje èi je chladiaci/hlbokomraziarensky

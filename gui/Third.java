@@ -2,12 +2,14 @@ package gui;
 
 import java.io.File;
 import java.io.IOException;
-import containers.Objednávka;
+
+import controller.Objednávka;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -34,15 +36,13 @@ public class Third extends Stage {
 		third.setVgap(5);
 		third.setHgap(5);
 		
-		third.setConstraints(label, 1, 0);
-		third.setConstraints(nacitaj, 1, 0);
-		third.setConstraints(zisticas, 0, 1);
-		third.setConstraints(label2, 1, 1);
-		third.setConstraints(zistidni, 0, 3);
-		third.setConstraints(label3, 1, 3);
-		third.setConstraints(nacitaj, 0, 4);
-		//third.setConstraints(textField, 0, 5);
-		
+		GridPane.setConstraints(label, 1, 0);
+		GridPane.setConstraints(nacitaj, 1, 0);
+		GridPane.setConstraints(zisticas, 0, 1);
+		GridPane.setConstraints(label2, 1, 1);
+		GridPane.setConstraints(zistidni, 0, 3);
+		GridPane.setConstraints(label3, 1, 3);
+		GridPane.setConstraints(nacitaj, 0, 4);
 		
 		zistiCenu.setOnAction(e->{																//Funkcia zistí celkovú cenu kontajnerov
 			label.setText(Integer.toString(list.zistiCenu(list)));
@@ -73,6 +73,7 @@ public class Third extends Stage {
 			}
 		});
 		
+		getIcons().add(new Image(getClass().getResourceAsStream("/resources/icon.jpg")));			//nastavenie ikony
 		Scene scene = new Scene(third, 450,450);
 		setScene(scene);
 		show();
