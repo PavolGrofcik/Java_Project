@@ -19,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import controller.NespravnyRozsah;
 
 
 public class MrazStage extends Stage {
@@ -26,9 +27,9 @@ public class MrazStage extends Stage {
 	private TextField field = new TextField();							//na poËet kontajnerov
 	private TextField field2 = new TextField();							//na rozsah stupnov, ktorÈ si zvoli uûÌvateæ	->	(0 - 30)
 	private ComboBox<String> box = new ComboBox<String>();				//UûÌvateæ si zad· Ëi chce vytvoriù hlbokomraziarensk˝ alebo len chladiaci
-	private Label specs = new Label("Zadajte öpecifik·cie");
+	private Label specs = new Label("Zadajte äpecifik·cie");
 	private Label notification = new Label();
-	private Button vytvor = new Button("Pridaj");
+	private Button vytvor = new Button("Pridaù");
 	private Button koniec = new Button("Sp‰ù");
 	private CheckBox checkBox = new CheckBox("Zadaù rozsah");
 	
@@ -65,7 +66,7 @@ public class MrazStage extends Stage {
 			if(checkBox.isSelected()){
 				field2.setVisible(true);
 				field2.setEditable(true);
-				field2.setPromptText("Zadajte rozsah od 0-30");
+				field2.setPromptText("Zadajte rozsah od 5-30");
 			}
 			
 			else if (!checkBox.isSelected()) {
@@ -96,6 +97,14 @@ public class MrazStage extends Stage {
 				}
 			
 			
+			} catch (NespravnyRozsah nrz) {
+				
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Chyba");
+				alert.setHeaderText("Error");
+				alert.setContentText("Zadali ste neplatn˝ rozsah pre zadan˝ typ kontajnera");									
+				alert.show();
+			
 			} catch (NumberFormatException e2) {	
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Chyba");
@@ -107,7 +116,7 @@ public class MrazStage extends Stage {
 				Alert alert1 = new Alert(AlertType.ERROR);
 				alert1.setTitle("Chyba");
 				alert1.setHeaderText("Error");
-				alert1.setContentText("Nevyplnili ste niektorÈ polia");									//Alert pre vöeobecnÈ bugs Exception
+				alert1.setContentText("Nevyplnili ste niektorÈ polia");									//Alert pre GeneralException
 				alert1.show();
 			}
 		});

@@ -1,6 +1,8 @@
 package containers;
 
-public abstract class Kontajner {
+import java.io.Serializable;
+
+public abstract class Kontajner implements Serializable{
 	protected int cena;
 	protected int prodtime;
 	
@@ -9,6 +11,8 @@ public abstract class Kontajner {
 	public  int zistiCenu(){											//zisti cenu každeho kontajneru
 		return this.cena;
 	}
+	
+	//doplnit zistiProdTime
 	
 	public abstract int zistiHmotnost();
 	public abstract int zistiZaruku();

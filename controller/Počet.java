@@ -15,9 +15,10 @@ public class Poèet extends TextField implements SledovatelObjednavky {
 	
 	
 	public void upovedom(){
-		poèet=objednávka.getPocetKontajnerov();
+		poèet=objednávka.getPocetKontajnerov();							//zisti aktuálny poèet kontajnerov
 		setText(Integer.toString(poèet));
 		setAlignment(Pos.BASELINE_CENTER);
+		setEditable(false);												//zamkne textfield aby bol vidite¾ný poèet kontajnerov
 	}
 	
 	

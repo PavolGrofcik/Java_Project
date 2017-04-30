@@ -20,23 +20,25 @@ public class Mraziarenskı extends Kontajner implements Atributy {
 		this.range=rozsah;
 		if (rozsah>15) {
 			this.name="Hlbokomraziarenskı";							//podla rozsahu teploty sa automaticky vygeneruje èi je chladiaci/hlbokomraziarensky
+			nastavCenu(2+pocet);									//poskytnutie zlavy na Hlbokomraziarenskı
+			nastavProdT(2+pocet);
 		}
 		else{
 			this.name="Chladiaci";
+			nastavCenu(pocet);
+			nastavProdT(pocet);
 		}
-
-		nastavCenu(pocet);
-		nastavProdT(pocet);
 	}
+	
 	//preaenie
 	public Mraziarenskı(String typ, int pocet) {
 		this.name=typ;
 		
 		if (typ.equals("Chladiaci")) {
-			this.range=15;
+			this.range=15;								//Max range pre Chladiaci
 		}
 		else{
-			this.range=29;
+			this.range=29;								//Max range pre Hlbokomraziarenskı
 		}
 		nastavCenu(pocet);
 		nastavProdT(pocet);

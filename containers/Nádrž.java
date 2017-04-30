@@ -5,6 +5,7 @@ public class Nádrž extends Kontajner implements Atributy {
 	private final int hmotnost = 1000;
 	
 	private int Objem;						//objem v m3 kubických, max 7 m3
+	private String Velkost;
 	
 	
 
@@ -12,6 +13,30 @@ public class Nádrž extends Kontajner implements Atributy {
 	nastavCenu(num);
 	nastavProdT(num);
 	}
+	
+	//konštruktor pre NadržStage
+	
+	public Nádrž(int num, String size) {
+		
+		this.Velkost=size;
+		
+		//nastavenie ceny a produkèneho èasu na zaklade výberu velkosti zákaznika										
+		if(Velkost.equals("Small")){
+			nastavCenu(num);
+			nastavProdT(num);
+			nastavObjem(size);
+		}
+		else if(Velkost.equals("Medium")){
+			nastavCenu(-2+num);
+			nastavProdT(-2+num);
+			nastavObjem(size);
+		}else if(Velkost.equals("Big")){
+			nastavCenu(-3+num);
+			nastavProdT(-3+num);
+			nastavObjem(size);
+		}
+	}
+	
 
 
 	@Override
@@ -21,7 +46,6 @@ public class Nádrž extends Kontajner implements Atributy {
 
 	@Override
 	public int zistiCas() {
-		// TODO Auto-generated method stub
 		return this.prodtime;
 	}
 
@@ -44,10 +68,21 @@ public class Nádrž extends Kontajner implements Atributy {
 	}
 
 	
-	
-	public void nastavObjem(int objem){
-		if (objem>8 || objem<0) {
-			this.Objem=objem;
+	public void nastavObjem(String objem){
+		
+		switch (objem) {
+		case "Small":{
+			this.Objem=3000;
+				}		
+			break;
+		case "Medium":{
+			this.Objem=7000;
+			}
+			break;
+		case "Big":{
+			this.Objem=10000;
+			}
+			break;
 		}
 	}
 	

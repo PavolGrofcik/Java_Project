@@ -20,23 +20,22 @@ import javafx.scene.text.Font;
 public class Main extends Application {
 
 	private Button next = new Button("Vytvoriù Objedn·vku"); // deklar·cia
-	private Button exit = new Button("UkonËi");
+	private Button exit = new Button("UkonËiù");
 	private Label pozdrav = new Label();
 
 	private Objedn·vka objednavka = new Objedn·vka();
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 
 			VBox root = new VBox(100);
-
-			root.getChildren().addAll(pozdrav, next, exit); // pridanie
-															// tlaËidiel na
-															// stage
+			root.getChildren().addAll(pozdrav, next, exit);
 			root.setAlignment(Pos.BASELINE_CENTER);
 
 			next.setOnAction(e -> {
-				new DruhÈ(objednavka);
+				
+				new Second(objednavka);
 				primaryStage.close();
 			});
 
@@ -47,16 +46,11 @@ public class Main extends Application {
 
 			exit.setPrefSize(75, 20);
 			exit.setOnAction(e -> {
-				ButtonType buttonOk = new ButtonType("OK"); // tlaËidlo OK
-				ButtonType buttonClose = new ButtonType("Cancel"); // tlaËidlo
-																	// Cancel
+				
+				ButtonType buttonOk = new ButtonType("OK");
+				ButtonType buttonClose = new ButtonType("Cancel");
 
-				// ukonËenie programu
-				Alert exit = new Alert(AlertType.CONFIRMATION); // set
-																// properties
-																// and prompttex
-																// of
-																// Confirmation
+				Alert exit = new Alert(AlertType.CONFIRMATION);		
 				exit.setTitle("UkonËiù?");
 				exit.setHeaderText("Ste si ist˝, ûe chcete ukonËiù program?");
 				exit.setContentText("Zvoæte moûnosù");
@@ -73,16 +67,17 @@ public class Main extends Application {
 
 			primaryStage.setTitle("Zadaj Objedn·vku");//
 			Scene scene = new Scene(root, 470, 450);
-			primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/icon.jpg"))); // nastavenie
-																											// ikony
-																											// skrz
-																											// resource
-																											// package
+			primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/icon.jpg")));
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Chyba");
+			alert.setHeaderText("Error");
+			alert.setContentText("Program sa bohuûiaæ musÌ ukonËiù");
+			alert.show();
+			
 		}
 	}
 

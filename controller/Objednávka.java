@@ -1,6 +1,5 @@
 package controller;
 
-import java.awt.List;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,23 +8,28 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
-
 import containers.Kontajner;
 import containers.Mraziarenský;
 import containers.Nádrž;
 import containers.Transportný;
 import containers.Ubytovací;
+import kamióny.Auto;
 
 public class Objednávka implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	//private int CelkovyCas=0;
+	//private int vzdialenost=0;
+	
 	private int PocetKontajnerov = 0;
 	
 	private ArrayList<Kontajner>  myList = new ArrayList<Kontajner>();										//arraylist na uskladnenie objednávky  vo¾ba zákaznika aké kontajnery si zvoli
-	transient private ArrayList<SledovatelObjednavky> sledovatelia = new ArrayList<>();						//arraylist na uchovovávanie sledovatelov kontajnerov
+	private ArrayList<Auto> transport = new ArrayList<Auto>();												//arraylist na uskladnenie aktuálnom poète aut
+	
+	transient private ArrayList<SledovatelObjednavky> sledovatelia = new ArrayList<>();						//transient arraylist na uchovovávanie sledovatelov kontajnerov
 	
 	//Observer -> metódy
 	
@@ -43,31 +47,50 @@ public class Objednávka implements Serializable{
 		return this.PocetKontajnerov;
 	}
 	
+	public void addTransport(int PocetKontajnerov){
+		if (PocetKontajnerov!=0) {
+			for(int i=0; i<myList.size();i++){
+			//dokonèi rtti
+			}		
+		}
+		
+		
+		
+	}
 	
 	
-	
-
-	
-	public void addMyList(String stage , int mnozstvo, String kontajner, int rozsah){
+	public void addMyList(String stage , int mnozstvo, String kontajner, int rozsah) throws NespravnyRozsah
+	{
 		if(stage.equals("MrazStage")){
-			if(rozsah>0){
-				//ak je zaškrtnutý checkbox tak rozsah nastavíme implicitne prostredníctvom Textfield2-u
-				
-				if (kontajner.equals("Chladiaci") && mnozstvo<=15) {
+			if (rozsah > 0) {
 
-					for (int i = 0; i < mnozstvo; i++) {
-						myList.add(new Mraziarenský("Chladiaci", mnozstvo, rozsah));
-						//observer 
-						PocetKontajnerov++;
-			
+				switch (kontajner) {
+
+				case "Chladiaci": {
+					if (rozsah < 5 || rozsah > 15) {
+						throw new NespravnyRozsah(); // Vlastná výnimka
+					} else {
+						for (int i = 0; i < mnozstvo; i++) {
+							myList.add(new Mraziarenský("Chladiaci", mnozstvo, rozsah));
+							// observer
+							PocetKontajnerov++;
+						}
 					}
-				} else if (kontajner.equals("Hlbokomraziarenský") && (rozsah>15 && rozsah<30)) {
-						
-					for (int i = 0; i < mnozstvo; i++) {
-						//observer
-						myList.add(new Mraziarenský("Hlbokomraziarenský", mnozstvo, rozsah));
-						PocetKontajnerov++;
+				}
+					break;
+				case "Hlbokomraziarenský": {
+					if (rozsah > 15 && rozsah < 30) {
+						for (int i = 0; i < mnozstvo; i++) {
+							// observer
+							myList.add(new Mraziarenský("Hlbokomraziarenský", mnozstvo, rozsah));
+							PocetKontajnerov++;
+						}
+					} else {
+						throw new NespravnyRozsah(); // Vlastná výnimka
 					}
+
+				}
+					break;
 				}
 			}
 			else if(rozsah==0){
@@ -82,56 +105,70 @@ public class Objednávka implements Serializable{
 				} else if (kontajner.equals("Hlbokomraziarenský")) {
 
 					for (int i = 0; i < mnozstvo; i++) {
-						//observer
 						myList.add(new Mraziarenský("Hlbokomraziarenský", mnozstvo));
+						//observer
 						PocetKontajnerov++;
 					}
 				}
-				
-				
 			}
 		upovedomSledovatelov();
-			//konèí MrazStage
+		
 		}
-		else if (stage.equals("TranStage")) {																	// kontrola pre Trapsportný kontajner
+		else if (stage.equals("TranStage")) {																	// kontrola pre Transportný kontajner
 			
+			//Vlastná Výnimka Nespravny rozsah
+			if(rozsah<2 || rozsah >10){
+				throw new NespravnyRozsah();
+			}
+			else{
+
+				for (int i = 0; i < mnozstvo; i++) {
+					myList.add(new Transportný(mnozstvo, kontajner));
+					// observer
+					PocetKontajnerov++;
+				}
+
+				upovedomSledovatelov();
+			}
+		}
+		else if(stage.equals("NadržStage")){																	//kontrola pre Nádrž (kontajner)
 			for(int i=0;i<mnozstvo;i++){
-				myList.add(new Transportný(rozsah, kontajner));
+				myList.add(new Nádrž(mnozstvo, kontajner));
+				//observer
 				PocetKontajnerov++;
 			}
-			
 			upovedomSledovatelov();
 		}
-		
-		
+		myList.trimToSize();
 	}
 	
-	public void addmyList(int mnozstvo, String kontajner){													//funkcia addmyList ktorá vytvorí daný poèet kontajnerov pod¾a vo¾by zakaznika
-		
-		if(kontajner.equals("Mraziarenský"))																//vytvorenie kontajnera pod¾a názvu(checkbox)
-		{																									//zatial len pomocná funkcia
-		for(int i = 0;i<mnozstvo;i++){
+	
+	
+	
+	public void addUbytovaci(String stage, int mnozstvo, String kontajner, int rozsah, boolean balcon) throws NespravnyRozsah{
+		if (stage.equals("UbytStage")) {
 			
-		myList.add(new Mraziarenský(mnozstvo));
+			if ((rozsah<1 || rozsah >5) && mnozstvo<2) {
+				throw new NespravnyRozsah();
+			}
+			else if(balcon){
+				for(int i=0;i<mnozstvo;i++){
+					myList.add(new Ubytovací(mnozstvo, kontajner, rozsah, balcon));
+					//Observer
+					PocetKontajnerov++;
+				}
+			}
+			else{
+				for(int i=0;i<mnozstvo;i++){
+					myList.add(new Ubytovací(mnozstvo, kontajner, rozsah, balcon));
+					//Observer
+					PocetKontajnerov++;
+				}
+			}
+			upovedomSledovatelov();
 		}
-		}else if(kontajner.equals("Nádrž")){
-			for(int i = 0;i<mnozstvo;i++){
-				myList.add(new Nádrž(mnozstvo));
-			}
-		}else if(kontajner.equals("Transportný")){
-			for(int i = 0;i<mnozstvo;i++){
-				myList.add(new Transportný(mnozstvo));
-			}
-		}else{
-			for(int i = 0; i<mnozstvo;i++){
-				myList.add(new Ubytovací(mnozstvo));
-			}
-		}
-
-		myList.trimToSize();																					//funkcia trimToSize ktorá upraví arraylist podla poètu, zmenší zväèší
+		myList.trimToSize();
 	}
-	
-	
 	
 	public int rti(Objednávka objednávka, Kontajner kontajner){															//RTTI
 		int number=0;
@@ -159,28 +196,49 @@ public class Objednávka implements Serializable{
 	public void zmaž(){																							//funkcia zmaže všetky položky v Arraliste
 		if(!myList.isEmpty()){																						//iba ak už v sebe obsahuje položky
 			myList.clear();
-		myList.trimToSize();
+			myList.trimToSize();
+			this.PocetKontajnerov=0;																				//Aktualizuje observera - aktuálny poèet kontajnerov
+			upovedomSledovatelov();
 		}
 	}
 	
 	
 	
 	public void uloz(File subor) throws ClassNotFoundException, IOException {									//uloženie objednávky do súboru FILE
+		try{
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(subor.getAbsolutePath()));			
 		out.writeObject(myList);
 		out.close();
+		} catch (Exception e) {
+			throw new IOException();
+		}
 	}
 	
 	public void nacitaj(File subor) throws ClassNotFoundException,IOException {
+		
+		try{
+			
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(subor.getAbsolutePath()));
-		Objednávka nacitany = (Objednávka) in.readObject();
+		//Objednávka nacitany = (Objednávka) in.readObject();
+		ArrayList<Kontajner> list = (ArrayList<Kontajner>) in.readObject();
 		in.close();
-		myList=nacitany.myList;																					//naèíta objednávku (kontajery) excluding observer
+		myList=list;																								//Naèíta serializovaný arraylist zo suboru do objednávky 
+																													//naèíta objednávku (kontajery) excluding observer
+		PocetKontajnerov=myList.size();
+		upovedomSledovatelov();
+		
+		myList.trimToSize();
+		
+		} catch (Exception e) {
+			
+			throw new ClassNotFoundException();
+		}
 	}
 
 	public int zistiCenu(Objednávka list){																		//funkcia zisti celkovu cenu kontajnerov
 		int sum=0;
 		Kontajner kontajner;
+		
 		for (int i = 0; i <list.myList.size(); i++) {
 			kontajner= list.myList.get(i);
 			sum+=kontajner.zistiCenu();
@@ -191,6 +249,7 @@ public class Objednávka implements Serializable{
 	public int zistiCas(Objednávka list){																		//funkcia na zistenie celkového produkèného èasu
 		int sum=0;
 		Kontajner kontajner;
+		
 		for(int i=0;i<list.zistiPoèet();i++){
 			kontajner=list.myList.get(i);
 			sum+= kontajner.zistiCas();

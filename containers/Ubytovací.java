@@ -6,14 +6,56 @@ public class Ubytovací extends Kontajner {
 	private final int hmotnost = 5000;			//kg
 	private  int zaruka =10;					//roky
 	
-	private int velkost;
+	private String typ;
+	private int pocetOkien;
+	private boolean balkon;
 
 
 	public Ubytovací(int num) {
 		nastavCenu(num);
 		nastavProdT(num);
 	}
-
+	
+	//preaenie
+	public Ubytovací(int mnozstvo, String type, int windows) {
+		this.typ=type;
+		this.pocetOkien=windows;
+		if(typ.equals("Rodinnı")){
+			nastavCenu(-2+mnozstvo);										//Rodinnı je drahší typ
+			nastavProdT(mnozstvo);										//Avšak produkènı èas je rovnakı
+		}
+		else if(typ.equalsIgnoreCase("Kancelársky")){
+			nastavCenu(25/windows+mnozstvo);
+			nastavProdT(mnozstvo);
+		}
+	}
+	
+	public Ubytovací(int mnozstvo, String type, int windows, boolean balcon) {
+		if(type.equals("Rodinnı")){
+			if (balcon) {
+				this.balkon=true;
+				this.typ=type;
+				this.pocetOkien=windows;
+				nastavCenu(-5+mnozstvo);
+				nastavProdT(-5+mnozstvo);
+			}else{
+				this.balkon=false;											//ak nie je zvolenı balkon
+				this.typ=type;
+				this.pocetOkien=windows;
+				nastavCenu(-2+mnozstvo);
+				nastavProdT(-2+mnozstvo);
+			}
+		}
+		else if(type.equals("Kancelársky")){
+			this.balkon=false;
+			this.typ=type;
+			this.pocetOkien=windows;
+			nastavCenu(mnozstvo);
+			nastavProdT(mnozstvo);
+		}
+	
+	}
+	
 	@Override
 	public int zistiZaruku() {
 		return this.zaruka;
@@ -46,14 +88,6 @@ public class Ubytovací extends Kontajner {
 	@Override
 	public int zistiHmotnost() {
 		return this.hmotnost;
-	}
-	
-	public int zistiVelkost(){
-		return this.velkost;
-	}
-	
-	public void nastavVelkost(int velky){
-		this.velkost=velky;
 	}
 
 }

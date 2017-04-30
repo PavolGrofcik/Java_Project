@@ -4,11 +4,9 @@ import containers.Kontajner;
 
 public class Auto {
 
-	private int nosnost;
-	private int cas;
-	
-	
-	
+	protected int nosnost;
+	protected int cas;
+	protected boolean nalozeny;
 	
 	
 	public void setAtributy(int m, int time){
@@ -19,15 +17,19 @@ public class Auto {
 	public int zistiCas(){
 		return cas;
 	}
+	public boolean zistiNalozeny(){
+		return this.nalozeny;
+	}
 	
 	public int zistiNosnost(){
 		return nosnost;
 	}
 	
 	public void nalozAuto(Kontajner kontajner){
-		
+		if (kontajner.zistiHmotnost()<5000) {
+		this.nalozeny=true;
 		this.nosnost=1;
-		
+		}
 	}
 	
 }

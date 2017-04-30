@@ -4,19 +4,34 @@ import containers.Kontajner;
 
 public class Prives {
 	
-	private final int hmotnost;
+	private final int nosnost=6000;
 	private Boolean nalozeny;
 	
-	public Prives(int m){												//hmotnosù je useless v tomto prÌpade?? delete ?
-		this.hmotnost=m;
+	public Prives(){												//hmotnosù je useless v tomto prÌpade?? delete ?
 		this.nalozeny=false;
 	}
-
-	public int zistihmotnost(int hmotnost){
-			return this.hmotnost;
+	
+	//Konötruktor
+	public Prives(Kontajner kontajner){
+		nalozPrives(kontajner);
 	}
 	
-	public void nalozPrives(Kontajner kontajner){
-		this.nalozeny=true;
+	
+	public int getNosnost(){
+			return this.nosnost;
 	}
+	
+	
+	public void nalozPrives(Kontajner kontajner){
+		
+		if (kontajner.zistiHmotnost()<nosnost) {
+			this.nalozeny=true;
+		}
+		
+	}
+	
+	public boolean getNalozeny(){
+		return this.nalozeny;
+	}
+	
 }

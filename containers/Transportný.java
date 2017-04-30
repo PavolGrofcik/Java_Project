@@ -25,8 +25,8 @@ public class Transportnı extends Kontajner implements Atributy {
 		}
 		else if(name.equals("Big")){
 			
-			nastavCenu(2*num);						//záleí aj akú velkos má danı kontajner Big || Medium
-			nastavProdT(2*num);
+			nastavCenu(3*num);						//záleí aj akú velkos má danı kontajner Big || Medium
+			nastavProdT(3*num);
 		}
 	}
 	
