@@ -45,13 +45,8 @@ public class Nádrž extends Kontajner implements Atributy {
 	}
 
 	@Override
-	public int zistiCas() {
-		return this.prodtime;
-	}
-
-	@Override
 	public void nastavCenu(int mnozstvo) {
-		if(mnozstvo>10)
+		if(mnozstvo>5)
 			this.cena=2000;
 		else {
 			this.cena=2500;
@@ -59,7 +54,7 @@ public class Nádrž extends Kontajner implements Atributy {
 	}
 	
 	public void nastavProdT(int mnozstvo){										//podla množstva sa  automaticky urèuje aj èas urèený na produkciu jednotlivých kontajnerov, èím viac tým rýchlejšie
-		if (mnozstvo>10) {
+		if (mnozstvo>5) {
 			this.prodtime=90;
 		}
 		else {

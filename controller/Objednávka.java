@@ -145,7 +145,7 @@ public class Objednávka implements Serializable{
 	
 	
 	
-	public void addUbytovaci(String stage, int mnozstvo, String kontajner, int rozsah, boolean balcon) throws NespravnyRozsah{
+	public void addUbytovaci(String stage, int mnozstvo, String kontajner, int rozsah, boolean balcon, boolean terrace) throws NespravnyRozsah{
 		if (stage.equals("UbytStage")) {
 			
 			if ((rozsah<1 || rozsah >5) && mnozstvo<2) {
@@ -153,14 +153,14 @@ public class Objednávka implements Serializable{
 			}
 			else if(balcon){
 				for(int i=0;i<mnozstvo;i++){
-					myList.add(new Ubytovací(mnozstvo, kontajner, rozsah, balcon));
+					myList.add(new Ubytovací(mnozstvo, kontajner, rozsah, balcon,terrace));
 					//Observer
 					PocetKontajnerov++;
 				}
 			}
 			else{
 				for(int i=0;i<mnozstvo;i++){
-					myList.add(new Ubytovací(mnozstvo, kontajner, rozsah, balcon));
+					myList.add(new Ubytovací(mnozstvo, kontajner, rozsah));
 					//Observer
 					PocetKontajnerov++;
 				}
@@ -235,7 +235,8 @@ public class Objednávka implements Serializable{
 		}
 	}
 
-	public int zistiCenu(Objednávka list){																		//funkcia zisti celkovu cenu kontajnerov
+	public int zistiCenu(Objednávka list){	
+		//funkcia zisti celkovu cenu kontajnerov
 		int sum=0;
 		Kontajner kontajner;
 		
@@ -246,7 +247,8 @@ public class Objednávka implements Serializable{
 		return sum;
 	}
 	
-	public int zistiCas(Objednávka list){																		//funkcia na zistenie celkového produkèného èasu
+	public int zistiCas(Objednávka list){
+		//funkcia na zistenie celkového produkèného èasu
 		int sum=0;
 		Kontajner kontajner;
 		

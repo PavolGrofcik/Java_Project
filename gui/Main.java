@@ -19,7 +19,7 @@ import javafx.scene.text.Font;
 
 public class Main extends Application {
 
-	private Button next = new Button("Vytvoriù Objedn·vku"); // deklar·cia
+	private Button next = new Button("Vytvoriù Objedn·vku");
 	private Button exit = new Button("UkonËiù");
 	private Label pozdrav = new Label();
 
@@ -47,8 +47,8 @@ public class Main extends Application {
 			exit.setPrefSize(75, 20);
 			exit.setOnAction(e -> {
 				
-				ButtonType buttonOk = new ButtonType("OK");
-				ButtonType buttonClose = new ButtonType("Cancel");
+				//ButtonType buttonOk = new ButtonType("OK");
+				//ButtonType buttonClose = new ButtonType("Cancel");
 
 				Alert exit = new Alert(AlertType.CONFIRMATION);		
 				exit.setTitle("UkonËiù?");
@@ -75,7 +75,7 @@ public class Main extends Application {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Chyba");
 			alert.setHeaderText("Error");
-			alert.setContentText("Program sa bohuûiaæ musÌ ukonËiù");
+			alert.setContentText("Something went wrong");
 			alert.show();
 			
 		}

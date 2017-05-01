@@ -10,6 +10,17 @@ public class Ubytovací extends Kontajner {
 	private int pocetOkien;
 	private boolean balkon;
 
+	// private inner Class Balcon, moná len pre Rodinny typ kontajnera, lepší spôsob namiesto Agregácie(global)
+	private class Balcon{
+		
+		private boolean Terasa;
+		
+		public Balcon(boolean terrace){
+			this.Terasa=terrace;
+		}
+		
+	}
+	
 
 	public Ubytovací(int num) {
 		nastavCenu(num);
@@ -20,50 +31,80 @@ public class Ubytovací extends Kontajner {
 	public Ubytovací(int mnozstvo, String type, int windows) {
 		this.typ=type;
 		this.pocetOkien=windows;
-		if(typ.equals("Rodinnı")){
+		this.balkon=false;
+		if(typ.equalsIgnoreCase("Rodinnı")){
 			nastavCenu(-2+mnozstvo);										//Rodinnı je drahší typ
-			nastavProdT(mnozstvo);										//Avšak produkènı èas je rovnakı
+			nastavProdT(mnozstvo);											//Avšak produkènı èas je rovnakı
+			zvysCenu(windows);
 		}
 		else if(typ.equalsIgnoreCase("Kancelársky")){
 			nastavCenu(25/windows+mnozstvo);
 			nastavProdT(mnozstvo);
+			zvysCenu(windows);
 		}
 	}
 	
-	public Ubytovací(int mnozstvo, String type, int windows, boolean balcon) {
+	public Ubytovací(int mnozstvo, String type, int windows, boolean balcon,boolean terrasa) {
 		if(type.equals("Rodinnı")){
 			if (balcon) {
 				this.balkon=true;
 				this.typ=type;
 				this.pocetOkien=windows;
+				//nastavenie Balkonu s atributmi
+				newInstanceBalcon(terrasa);
+				
 				nastavCenu(-5+mnozstvo);
 				nastavProdT(-5+mnozstvo);
+				zvysCenu(balcon, terrasa);
+				zvysCenu(windows);
 			}else{
 				this.balkon=false;											//ak nie je zvolenı balkon
 				this.typ=type;
 				this.pocetOkien=windows;
-				nastavCenu(-2+mnozstvo);
-				nastavProdT(-2+mnozstvo);
+				nastavCenu(zmenMnozstvoParam(-2, mnozstvo));
+				nastavProdT(zmenMnozstvoParam(-2, mnozstvo));
+				zvysCenu(windows);
 			}
 		}
+		/*
 		else if(type.equals("Kancelársky")){
 			this.balkon=false;
 			this.typ=type;
 			this.pocetOkien=windows;
 			nastavCenu(mnozstvo);
 			nastavProdT(mnozstvo);
-		}
+			zvysCenu(windows);
+		}*/
+	}
 	
+
+	public void zvysCenu(boolean balcon,boolean terrasa){
+		
+		if(balcon){
+			if(terrasa){
+				cena+=300;				//terasa = 300€;
+			}
+			else{
+				cena+=150;				//balkon = 150€;
+			}
+		}
+	}
+	
+	public int zmenMnozstvoParam(int number, int curr){
+		return number+curr;
+	}
+	
+	public void zvysCenu(int windows){
+		cena+=(windows*50);				//1 okno = 50€;
+	}
+	
+	public Balcon newInstanceBalcon(boolean withTerrace){							//ak uívatel zvolí monos Balcon
+		return new Balcon(withTerrace);
 	}
 	
 	@Override
 	public int zistiZaruku() {
 		return this.zaruka;
-	}
-
-	@Override
-	public int zistiCas() {
-		return this.prodtime;
 	}
 
 	@Override

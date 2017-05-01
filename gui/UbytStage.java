@@ -33,11 +33,12 @@ public class UbytStage extends Stage{
 	private  Button back = new Button("Sp‰ù");
 	private ComboBox<String> type = new ComboBox<String>();
 	private CheckBox balcon = new CheckBox("BalkÛn");
+	private CheckBox terrace = new CheckBox("Terasa");
 	
 	public UbytStage(Objedn·vka objedn·vka){
 		
 		VBox root = new VBox(5);
-		root.getChildren().addAll(header,number,title,type,windows,balcon,add,notification,back);
+		root.getChildren().addAll(header,number,title,type,windows,balcon,terrace,add,notification,back);
 		
 		root.setAlignment(Pos.BASELINE_CENTER);
 		initModality(Modality.APPLICATION_MODAL);
@@ -59,8 +60,12 @@ public class UbytStage extends Stage{
 		balcon.setSelected(false);
 		balcon.setVisible(false);
 		
+		terrace.setSelected(false);
+		terrace.setVisible(false);
+		
 		
 		type.getItems().addAll("Rodinn˝", "Kancel·rsky");
+		type.setPromptText("Zvoæ");
 		type.setOnAction(e->{
 			if(type.getSelectionModel().getSelectedItem().equals("Rodinn˝")){
 				balcon.setVisible(true);
@@ -71,11 +76,22 @@ public class UbytStage extends Stage{
 			}
 		});
 		
+		balcon.setOnAction(e->{
+			//nastavenie terasy
+			if(balcon.isSelected()){
+				terrace.setVisible(true);																//vytvorÌ vhniezden˙ triedu v Ubytovacom kontajneri
+			}
+			else{
+				terrace.setVisible(false);
+			}
+			
+		});
+		
 		add.setOnAction(e->{
 			try {
 				
-				objedn·vka.addUbytovaci(toString().substring(4, 13), Integer.parseInt(number.getText()), type.getSelectionModel().getSelectedItem(), Integer.parseInt(windows.getText()), balcon.isSelected());
-				//objedn·vka.addMyList(toString().substring(4, 13), Integer.parseInt(number.getText()), type.getSelectionModel().getSelectedItem(), Integer.parseInt(windows.getText()));
+				objedn·vka.addUbytovaci(toString().substring(4, 13), Integer.parseInt(number.getText()), type.getSelectionModel().getSelectedItem(), Integer.parseInt(windows.getText()), balcon.isSelected(),terrace.isSelected());
+				
 				number.clear();
 				windows.clear();
 				balcon.setSelected(false);
@@ -135,7 +151,7 @@ public class UbytStage extends Stage{
 		
 		
 		getIcons().add(new Image(getClass().getResourceAsStream("/resources/icon.jpg")));
-		Scene scene = new Scene(root,250,250);
+		Scene scene = new Scene(root,250,275);
 		setResizable(false);
 		setScene(scene);
 		show();

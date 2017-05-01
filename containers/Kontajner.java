@@ -3,20 +3,23 @@ package containers;
 import java.io.Serializable;
 
 public abstract class Kontajner implements Serializable{
+	
 	protected int cena;
 	protected int prodtime;
 	
-	//pri kadom kontajneri zvláš budem musie vytvori explicitnı konštruktor + override methods from abstract class
 	
 	public  int zistiCenu(){											//zisti cenu kadeho kontajneru
+		
 		return this.cena;
 	}
 	
-	//doplnit zistiProdTime
+	public int zistiCas(){												//zisti produkèny èas daneho kontajnera
+		
+		return this.prodtime;
+	}
 	
 	public abstract int zistiHmotnost();
 	public abstract int zistiZaruku();
-	public abstract int zistiCas();
 	public abstract void nastavCenu(int mnozstvo);		
 }
 

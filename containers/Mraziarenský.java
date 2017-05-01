@@ -57,11 +57,6 @@ public class Mraziarenský extends Kontajner implements Atributy {
 	}
 
 	@Override
-	public int zistiCas() {
-		return this.prodtime;
-	}
-
-	@Override
 	public void nastavCenu(int mnozstvo) {
 		if(mnozstvo>7){
 			cena=2000;

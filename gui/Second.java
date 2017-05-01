@@ -1,7 +1,6 @@
 package gui;
 
 
-import java.beans.DesignMode;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
@@ -19,7 +18,7 @@ import javafx.stage.*;
 
 public class Second extends Stage {
 	
-	private Label lbl1 = new Label("Vyberte typy kontajnerov");
+	private Label lbl1 = new Label("Zvoæte typy kontajnerov");
 	private Label notification = new Label("Aktu·lny poËet");
 	private Button pridaj = new Button("Pridaù");
 	private Button back = new Button("UkonËiù");
@@ -43,13 +42,15 @@ public class Second extends Stage {
 	}
 	
 	public Second(Objedn·vka pom) {
+		
 		super(); 
 		this.objedn·vka=pom;
+		
 		VBox root = new VBox(5);
 		setTitle("Objedn·vka");
 		initModality(Modality.APPLICATION_MODAL);																	//zamkne okno
 	
-		root.getChildren().addAll(lbl1, box,pridaj, delete,saveFile,nextScene,back);				//pridanie tlaËidiel
+		root.getChildren().addAll(lbl1, box,pridaj, delete,saveFile,nextScene,back);								//pridanie tlaËidiel
 		root.setAlignment(Pos.CENTER);
 		
 		
@@ -64,6 +65,7 @@ public class Second extends Stage {
 		
 		box.setTranslateX(0);
 		box.setTranslateY(0);
+		box.setPromptText("Zvoæ");
 
 		poËet = new PoËet(objedn·vka);
 		objedn·vka.pridajSledovatela(poËet);
@@ -76,7 +78,7 @@ public class Second extends Stage {
 	
 
 		pridaj.setOnAction(e -> {																				 		// Inicializacia tlacidla VYTVOR
-			//prerobiù na switch kvÙli objektovej paradigme
+			//prÌkaz switch namiesto if-else, kvÙli objektovej paradigme
 			try {
 				lbl1.setText("Zadaj poËet Kontajnerov");
 				/*objedn·vka.addmyList(Integer.parseInt(txt1.getText()),
@@ -97,24 +99,9 @@ public class Second extends Stage {
 				}break;
 				}
 				
-				/*
-				if(box.getSelectionModel().getSelectedItem().equals("Mraziarensk˝")){
-					new MrazStage(objedn·vka);
-				}
-				else if(box.getSelectionModel().getSelectedItem().equals("Transportn˝")){
-					new TranStage(objedn·vka);
-					
-				}
-				else if(box.getSelectionModel().getSelectedItem().equals("N·drû")){
-					new NadrûStage(objedn·vka);
-				}
-				else if(box.getSelectionModel().getSelectedItem().equals("UbytovacÌ")){
-					new UbytStage(objedn·vka);
-				}
-				*/
 			} catch (Exception e2) {
-				Alert b = new Alert(AlertType.ERROR); 	// chyba pri nezadanÌ
-														// ËÌsla
+				Alert b = new Alert(AlertType.ERROR); 	// chyba pri nezadanÌ typu kontajnera
+														
 				b.setTitle("Chyba");
 				b.setHeaderText("Error!");
 				b.setContentText("Nezadali ste typ kontajnera");
@@ -182,7 +169,7 @@ public class Second extends Stage {
 		
 		getIcons().add(new Image(getClass().getResourceAsStream("/resources/icon.jpg")));
 		Scene scene = new Scene(root, 450, 450); 
-		scene.getStylesheets().add(this.getClass().getResource("Design.css").toExternalForm());
+		//scene.getStylesheets().add(this.getClass().getResource("Design.css").toExternalForm());
 		setScene(scene);
 		show(); 
 

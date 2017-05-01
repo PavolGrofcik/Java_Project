@@ -42,11 +42,6 @@ public class Transportný extends Kontajner implements Atributy {
 			this.prodtime=70;
 		}
 	}
-	
-	@Override
-	public int zistiCas() {
-		return this.prodtime;
-	}
 
 	@Override
 	public void nastavCenu(int mnozstvo) {										//poskytuje zlavu 33% ak objednávka presahuje viac ako 10 položiek

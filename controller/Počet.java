@@ -8,7 +8,7 @@ public class Poèet extends TextField implements SledovatelObjednavky {
 	private int poèet=0;
 	private Objednávka objednávka;
 	
-	public Poèet(Objednávka objednávka){
+	public Poèet(Objednávka objednávka){		//agregácia by containment
 		super();
 		this.objednávka=objednávka;
 	}
