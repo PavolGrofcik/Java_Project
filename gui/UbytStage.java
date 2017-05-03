@@ -95,6 +95,7 @@ public class UbytStage extends Stage{
 				number.clear();
 				windows.clear();
 				balcon.setSelected(false);
+				terrace.setSelected(false);
 				notification.setText("Položky boli pridané");
 				
 			} catch (NespravnyRozsah nrh){

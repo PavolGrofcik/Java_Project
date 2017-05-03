@@ -11,6 +11,9 @@ public class Poèet extends TextField implements SledovatelObjednavky {
 	public Poèet(Objednávka objednávka){		//agregácia by containment
 		super();
 		this.objednávka=objednávka;
+		setPromptText("0");
+		setEditable(false);
+		setAlignment(Pos.BASELINE_CENTER);
 	}
 	
 	

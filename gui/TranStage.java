@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 public class TranStage extends Stage {
 	
 	private Label header = new Label("Zadajte äpecifik·cie");
-	private Label title = new Label("Zadajte veækosù");
+	private Label title = new Label("Zadajte nosnosù");
 	private Label title2 = new Label("Zadajte poËet");
 	private Label notification = new Label();
 	private TextField weight = new TextField();
@@ -46,6 +46,7 @@ public class TranStage extends Stage {
 		setTitle("Transportn˝");
 	
 		size.getItems().addAll("Medium", "Big");										//pridanie poloûiek do ComboBox-a
+		size.setPromptText("Zvoæ");
 		
 		header.setFont(Font.font("Cambria", 20));										//nastavenie font-u a color-u pre HlaviËku
 		header.setTextFill(Color.LIGHTSKYBLUE);

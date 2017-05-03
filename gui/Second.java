@@ -3,6 +3,7 @@ package gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Optional;
 import controller.Objedn·vka;
 import controller.PoËet;
@@ -15,20 +16,25 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.*;
+import java.time.*;
+import java.time.format.*;
 
 public class Second extends Stage {
 	
 	private Label lbl1 = new Label("Zvoæte typy kontajnerov");
 	private Label notification = new Label("Aktu·lny poËet");
+	private Label date = new Label();
 	private Button pridaj = new Button("Pridaù");
 	private Button back = new Button("UkonËiù");
 	private Button delete = new Button("Zmazaù poloûky");
-	private Button nextScene = new Button("DokonËiù objedn·vku");
+	private Button nextScene = new Button("DokonËiù transport");
 	private Button saveFile = new Button("Uloûiù objedn·vku");
 	private ComboBox<String> box = new ComboBox<String>();
 	
 	private PoËet poËet;
 	private Objedn·vka objedn·vka;
+	private LocalDate date2 = LocalDate.now();//.plusDays(0); date picker kedy prÌde objend·vka 
+	
 	
 
 	public static void vytvor(Button btn, int prefWidth,int prefHeight){
@@ -42,7 +48,6 @@ public class Second extends Stage {
 	}
 	
 	public Second(Objedn·vka pom) {
-		
 		super(); 
 		this.objedn·vka=pom;
 		
@@ -50,7 +55,7 @@ public class Second extends Stage {
 		setTitle("Objedn·vka");
 		initModality(Modality.APPLICATION_MODAL);																	//zamkne okno
 	
-		root.getChildren().addAll(lbl1, box,pridaj, delete,saveFile,nextScene,back);								//pridanie tlaËidiel
+		root.getChildren().addAll(date,lbl1, box,pridaj, delete,saveFile,nextScene,back);								//pridanie tlaËidiel
 		root.setAlignment(Pos.CENTER);
 		
 		
@@ -61,10 +66,9 @@ public class Second extends Stage {
 		lbl1.setTextFill(Color.SLATEBLUE);
 		
 		notification.setFont(Font.font("Cambria", 18));
-		
-		
-		box.setTranslateX(0);
-		box.setTranslateY(0);
+		date.setText(date2.format(DateTimeFormatter.ofPattern("dd.MM.y")));
+		date.setId("Date");
+
 		box.setPromptText("Zvoæ");
 
 		poËet = new PoËet(objedn·vka);
@@ -136,7 +140,8 @@ public class Second extends Stage {
 		});
 		
 		nextScene.setOnAction(e-> {										//ukonËenie aktu·lneho frame-u a preskoËenie do Third
-		new Third(objedn·vka);
+		new Transport(objedn·vka);
+		//new Third(objedn·vka);
 		//hide();	
 		});
 		
@@ -169,7 +174,7 @@ public class Second extends Stage {
 		
 		getIcons().add(new Image(getClass().getResourceAsStream("/resources/icon.jpg")));
 		Scene scene = new Scene(root, 450, 450); 
-		//scene.getStylesheets().add(this.getClass().getResource("Design.css").toExternalForm());
+		scene.getStylesheets().add(this.getClass().getResource("Design.css").toExternalForm());
 		setScene(scene);
 		show(); 
 

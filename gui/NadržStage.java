@@ -41,6 +41,7 @@ public class NadrStage extends Stage {
 		
 		//prerobi automaticke pridavanie podla checboxu zada vlastnı objem!!!
 		size.getItems().addAll("Small", "Medium", "Big");
+		size.setPromptText("Zvo¾");
 		
 		//nastavenie vlastnotí Label=u header
 		header.setFont(Font.font("Cambria", 20));

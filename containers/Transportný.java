@@ -8,27 +8,43 @@ public class Transportnı extends Kontajner implements Atributy {
 	private int nosnost;						//kg
 	private String name;						//typ Big alebo Medium
 	
-	public Transportnı(int num){
+	//Constructor
+	public Transportnı(int num, int range, String size){
+		
+		this.nosnost=range;
+		this.name=size;
+		
 		nastavCenu(num);
 		nastavProdT(num);
+		zvysCenu(range);
+		zvysCenu(size);
+		
 	}
 	
-	
-	//overloading
-	public Transportnı(int num, String nazov){
-		this.nosnost=num;
-		this.name=nazov;
-		if(name.equals("Medium")){
-			
-			nastavCenu(num);							//Error prerobit u Transportneho::::::::::::::::::::::::::::::::::::
-			nastavProdT(num);							//Rovnako prerobit:::::::::::::::::::::::::::::::::::
-		}
-		else if(name.equals("Big")){
-			
-			nastavCenu(3*num);						//záleí aj akú velkos má danı kontajner Big || Medium
-			nastavProdT(3*num);
+	//zvysi cenu pre typ Transportneho kontajnera Big/Medium
+	public void zvysCenu(String size){
+		switch (size) {
+		case "Medium":
+			this.cena+=200;
+			break;
+
+		case "Big":
+			this.cena+=500;
+			break;
 		}
 	}
+	
+	//zvysi cenu pre nosnost Transportneho kontajnera 2/10 ton
+	public void zvysCenu(int range){
+		if(range>6){
+			this.cena+=200;
+		}
+		else if(range >=2 && range <7){
+			this.cena+=100;
+		}
+		
+	}
+	
 	
 	public int zistiZaruku() {
 		return this.zaruka;

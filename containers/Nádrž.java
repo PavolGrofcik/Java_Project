@@ -8,14 +8,7 @@ public class Nádrž extends Kontajner implements Atributy {
 	private String Velkost;
 	
 	
-
-	public Nádrž(int num) {
-	nastavCenu(num);
-	nastavProdT(num);
-	}
-	
-	//konštruktor pre NadržStage
-	
+	//Constructor
 	public Nádrž(int num, String size) {
 		
 		this.Velkost=size;
@@ -27,18 +20,23 @@ public class Nádrž extends Kontajner implements Atributy {
 			nastavObjem(size);
 		}
 		else if(Velkost.equals("Medium")){
-			nastavCenu(-2+num);
-			nastavProdT(-2+num);
+			nastavCenu(zmenMnozstvo(num,-2));
+			nastavProdT(zmenMnozstvo(num,-2));
 			nastavObjem(size);
 		}else if(Velkost.equals("Big")){
-			nastavCenu(-3+num);
-			nastavProdT(-3+num);
+			nastavCenu(zmenMnozstvo(num,-3));
+			nastavProdT(zmenMnozstvo(num,-3));
 			nastavObjem(size);
 		}
 	}
 	
+	//Metóda zmení mnozstvo o daný poèet
+	//number = zvolene mnozstvo, delta = o kolko zmenit, konštanta
+	public int zmenMnozstvo(int number, int delta){
+		return number-delta;
+	}
 
-
+	
 	@Override
 	public int zistiZaruku() {
 		return this.zaruka;

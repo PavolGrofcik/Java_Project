@@ -21,45 +21,42 @@ public class Objednávka implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	//private int CelkovyCas=0;
-	//private int vzdialenost=0;
 	
 	private int PocetKontajnerov = 0;
+	private int PocetDni=0;
+	private int TotalCena=0;
+	private int Vzdialenost=0;
 	
 	private ArrayList<Kontajner>  myList = new ArrayList<Kontajner>();										//arraylist na uskladnenie objednávky  vo¾ba zákaznika aké kontajnery si zvoli
-	private ArrayList<Auto> transport = new ArrayList<Auto>();												//arraylist na uskladnenie aktuálnom poète aut
+	private ArrayList<Auto> cars = new ArrayList<Auto>();												//arraylist na uskladnenie aktuálnom poète aut
 	
 	transient private ArrayList<SledovatelObjednavky> sledovatelia = new ArrayList<>();						//transient arraylist na uchovovávanie sledovatelov kontajnerov
 	
 	//Observer -> metódy
 	
-	public void pridajSledovatela(SledovatelObjednavky sledovatelObjednavky){
+	public void pridajSledovatela(SledovatelObjednavky sledovatelObjednavky) {
 		sledovatelia.add(sledovatelObjednavky);
 	}
-	
-	public void upovedomSledovatelov(){
-		for(SledovatelObjednavky s : sledovatelia){
+
+	public void upovedomSledovatelov() {
+		for (SledovatelObjednavky s : sledovatelia) {
 			s.upovedom();
 		}
 	}
 
-	public int getPocetKontajnerov(){
+	public int getPocetKontajnerov() {
 		return this.PocetKontajnerov;
 	}
-	
-	public void addTransport(int PocetKontajnerov){
-		if (PocetKontajnerov!=0) {
-			for(int i=0; i<myList.size();i++){
-			//dokonèi rtti
-			}		
+
+	public void addTransport(int PocetKontajnerov) {
+		if (PocetKontajnerov != 0) {
+			for (int i = 0; i < myList.size(); i++) {
+				// dokonèi rtti
+			}
 		}
-		
-		
-		
 	}
 	
-	
-	public void addMyList(String stage , int mnozstvo, String kontajner, int rozsah) throws NespravnyRozsah
+	public void addMyList(String stage , int mnozstvo, String kontajner, int rozsah) throws NespravnyRozsah		//vyhadzovanie vlastných výnimiek
 	{
 		if(stage.equals("MrazStage")){
 			if (rozsah > 0) {
@@ -123,7 +120,7 @@ public class Objednávka implements Serializable{
 			else{
 
 				for (int i = 0; i < mnozstvo; i++) {
-					myList.add(new Transportný(mnozstvo, kontajner));
+					myList.add(new Transportný(mnozstvo, rozsah, kontajner));
 					// observer
 					PocetKontajnerov++;
 				}
@@ -144,37 +141,37 @@ public class Objednávka implements Serializable{
 	
 	
 	
-	
-	public void addUbytovaci(String stage, int mnozstvo, String kontajner, int rozsah, boolean balcon, boolean terrace) throws NespravnyRozsah{
+	//metóda pridá ubytovací kontajner
+	public void addUbytovaci(String stage, int mnozstvo, String kontajner, int rozsah, boolean balcon, boolean terrace) throws NespravnyRozsah {
+		
 		if (stage.equals("UbytStage")) {
-			
-			if ((rozsah<1 || rozsah >5) && mnozstvo<2) {
-				throw new NespravnyRozsah();
-			}
-			else if(balcon){
-				for(int i=0;i<mnozstvo;i++){
-					myList.add(new Ubytovací(mnozstvo, kontajner, rozsah, balcon,terrace));
-					//Observer
-					PocetKontajnerov++;
+			switch (stage) {
+			case "UbytStage":
+				if ((rozsah < 1 || rozsah > 5) && mnozstvo < 2) {
+					throw new NespravnyRozsah();
+				} else if (balcon) {
+					for (int i = 0; i < mnozstvo; i++) {
+						myList.add(new Ubytovací(mnozstvo, kontajner, rozsah, balcon, terrace));
+						// Observer
+						PocetKontajnerov++;
+					}
+				} else {
+					for (int i = 0; i < mnozstvo; i++) {
+						myList.add(new Ubytovací(mnozstvo, kontajner, rozsah));
+						// Observer
+						PocetKontajnerov++;
+					}
 				}
+				upovedomSledovatelov();
 			}
-			else{
-				for(int i=0;i<mnozstvo;i++){
-					myList.add(new Ubytovací(mnozstvo, kontajner, rozsah));
-					//Observer
-					PocetKontajnerov++;
-				}
-			}
-			upovedomSledovatelov();
+			myList.trimToSize();
 		}
-		myList.trimToSize();
 	}
 	
 	public int rti(Objednávka objednávka, Kontajner kontajner){															//RTTI
+		
 		int number=0;
 		
-		//Iterator<List> iterator = new Iterator<List>() {
-		//};
 		
 		for(int i =0; i<objednávka.zistiPoèet();i++){
 			Kontajner kontajner2;
@@ -243,6 +240,7 @@ public class Objednávka implements Serializable{
 		for (int i = 0; i <list.myList.size(); i++) {
 			kontajner= list.myList.get(i);
 			sum+=kontajner.zistiCenu();
+			TotalCena+=sum;																							//Uloží celkovú cenu do premennej TotalCena ktorá bude slúži na finalizáciu objednávky
 		}
 		return sum;
 	}
@@ -261,8 +259,18 @@ public class Objednávka implements Serializable{
 	
 	public int zistiPocetDni(Objednávka list){
 		int dni = (int) zistiCas(list)/24;																		//volanie metódy zisti cas, ktorá vráti celkový èas a naslédne sa vydeli konštantou 24 aby sa zistil
-		 																										//poèet dní
+		this.PocetDni+=dni; 																					//Pripoèíta k celkovým dnom výroby
 		return dni;	
+	}
+	
+	//metóda zistí aktuálny poèet dni
+	
+	public int getPocetDni(){
+		return this.PocetDni;
+	}
+	
+	public int getTotalCena(){
+		return this.TotalCena;
 	}
 
 	

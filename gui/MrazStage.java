@@ -46,6 +46,7 @@ public class MrazStage extends Stage {
 		initModality(Modality.APPLICATION_MODAL);
 		
 		box.getItems().addAll("Chladiaci", "Hlbokomraziarenský");												//naplnenie ComboBoxa items
+		box.setPromptText("Zvo¾");
 		
 		specs.setFont(Font.font("Cambria", 20));
 		specs.setTextFill(Color.DARKORANGE);
