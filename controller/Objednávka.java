@@ -14,6 +14,9 @@ import containers.Nádrž;
 import containers.Transportný;
 import containers.Ubytovací;
 import kamióny.Auto;
+import kamióny.Avia;
+import kamióny.Kamión;
+import kamióny.Prives;
 
 public class Objednávka implements Serializable{
 	/**
@@ -25,12 +28,27 @@ public class Objednávka implements Serializable{
 	private int PocetKontajnerov = 0;
 	private int PocetDni=0;
 	private int TotalCena=0;
-	private int Vzdialenost=0;
+	private int Vzdialenost=0;		//km
+	private String Trieda=null;
+	private String Kraj=null;
+
 	
-	private ArrayList<Kontajner>  myList = new ArrayList<Kontajner>();										//arraylist na uskladnenie objednávky  vo¾ba zákaznika aké kontajnery si zvoli
-	private ArrayList<Auto> cars = new ArrayList<Auto>();												//arraylist na uskladnenie aktuálnom poète aut
+	
+	private ArrayList<Kontajner> myList = ListCreator.Listcreate();
+	private ArrayList <Auto> cars = ListCreator.Listcreate();
 	
 	transient private ArrayList<SledovatelObjednavky> sledovatelia = new ArrayList<>();						//transient arraylist na uchovovávanie sledovatelov kontajnerov
+	
+	
+	//implicitné nastavenie poètu vozidiel pri vytvorení objednávky
+	public Objednávka(){
+		try {
+			addCars(10, "Kamión");
+			addCars(10, "Avia");
+		} catch (NesprávnyTypVozidla e) {
+		}
+	}
+	
 	
 	//Observer -> metódy
 	
@@ -48,14 +66,48 @@ public class Objednávka implements Serializable{
 		return this.PocetKontajnerov;
 	}
 
-	public void addTransport(int PocetKontajnerov) {
-		if (PocetKontajnerov != 0) {
-			for (int i = 0; i < myList.size(); i++) {
-				// dokonèi rtti
-			}
+	
+	//Dorobi transport
+
+	
+	//Metóda na upresnenie špecifikácií
+	public void saveTransport(String vzdialenost, String typZasielky){
+		this.Kraj=vzdialenost;															//Trieda si zapamätá kraj, ktorý si zvolil zákazník
+		
+		switch(typZasielky){
+		case "1.":	setVzdialenost(vzdialenost);
+					this.Trieda=typZasielky;
+					break;
+		case "2.": setVzdialenost(vzdialenost);
+					this.Trieda=typZasielky;
+					break;
 		}
+		
 	}
 	
+	public void addCars(int pocet, String vozidlo) throws NesprávnyTypVozidla{
+		
+		switch (vozidlo) {
+		
+		case "Avia":
+			for(int i=0;i<pocet;i++){
+				cars.add(new Avia());
+			}
+			cars.trimToSize();
+			break;
+		case "Kamión":
+			for(int i=0;i<pocet;i++){
+				cars.add(new Kamión(new Prives()));
+			}
+			cars.trimToSize();
+			break;
+		default:								//V prípade ak admin pridá nove vozidla, a nastane typo v type vozidla
+			throw new NesprávnyTypVozidla();
+		}
+		
+	}
+	
+	//Pridavanie do listu jednotlivé kontajnery
 	public void addMyList(String stage , int mnozstvo, String kontajner, int rozsah) throws NespravnyRozsah		//vyhadzovanie vlastných výnimiek
 	{
 		if(stage.equals("MrazStage")){
@@ -129,6 +181,7 @@ public class Objednávka implements Serializable{
 			}
 		}
 		else if(stage.equals("NadržStage")){																	//kontrola pre Nádrž (kontajner)
+			
 			for(int i=0;i<mnozstvo;i++){
 				myList.add(new Nádrž(mnozstvo, kontajner));
 				//observer
@@ -172,7 +225,6 @@ public class Objednávka implements Serializable{
 		
 		int number=0;
 		
-		
 		for(int i =0; i<objednávka.zistiPoèet();i++){
 			Kontajner kontajner2;
 			kontajner2=objednávka.myList.get(i);				
@@ -191,10 +243,12 @@ public class Objednávka implements Serializable{
 	
 	
 	public void zmaž(){																							//funkcia zmaže všetky položky v Arraliste
-		if(!myList.isEmpty()){																						//iba ak už v sebe obsahuje položky
+		if(!myList.isEmpty()){																					//iba ak už v sebe obsahuje položky
+			
+			this.PocetKontajnerov=0;																			//Aktualizuje observera - aktuálny poèet kontajnerov
+			
 			myList.clear();
 			myList.trimToSize();
-			this.PocetKontajnerov=0;																				//Aktualizuje observera - aktuálny poèet kontajnerov
 			upovedomSledovatelov();
 		}
 	}
@@ -217,6 +271,7 @@ public class Objednávka implements Serializable{
 			
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(subor.getAbsolutePath()));
 		//Objednávka nacitany = (Objednávka) in.readObject();
+		@SuppressWarnings("unchecked")
 		ArrayList<Kontajner> list = (ArrayList<Kontajner>) in.readObject();
 		in.close();
 		myList=list;																								//Naèíta serializovaný arraylist zo suboru do objednávky 
@@ -273,5 +328,44 @@ public class Objednávka implements Serializable{
 		return this.TotalCena;
 	}
 
+	public void addCena(int delta){
+		this.TotalCena+=delta;
+	}
+	
+	public void setVzdialenost(String kraj){
+		
+		//podla kraju sa jednotlivo urèuje vzdialenost
+		//Záleží aj od toho cena, jednotlive kraje majú rôzne ceny
+		switch (kraj) {
+		case "Bratislavský": this.Vzdialenost=100;
+							addCena(100);
+			break;
+		case "Trnavský": this.Vzdialenost=150;
+						 addCena(150);
+			break;
+		case "Nitriansky": this.Vzdialenost=150;
+						   addCena(150);
+			break;
+		case "Trenèiansky": this.Vzdialenost=200;
+							addCena(200);
+			break;
+		case "Banskobystrický": this.Vzdialenost=250;
+								addCena(250);
+			break;
+		case "Žilinský": this.Vzdialenost=250;
+						 addCena(250);
+			break;
+		case "Prešovský": this.Vzdialenost=300;
+						  addCena(300);
+			break;
+		case "Košický": this.Vzdialenost=300;
+						addCena(300);
+			break;
+		}
+	}
+	
+	public int getCars(){
+		return cars.size();
+	}
 	
 }

@@ -2,7 +2,7 @@ package containers;
 
 public class Nádrž extends Kontajner implements Atributy {
 	private  int zaruka =7;					//roky
-	private final int hmotnost = 1000;
+	private final int hmotnost = 1500;
 	
 	private int Objem;						//objem v m3 kubických, max 7 m3
 	private String Velkost;

@@ -1,6 +1,58 @@
 
 #Date{
+	-fx-text-fill: #ff3333;
 	-fx-font-size: 20px;
+	-fx-font-weight: bold;
+	-fx-font-family: Lucida Sans Unicode;
+}
+
+#Header2{
+	-fx-text-fill: #1a8cff;
+	-fx-font-size: 18px;
+	-fx-font-weight: bold;
+	-fx-font-family: Lucida Sans Unicode;
+	
+}
+
+#Aktual{
+	-fx-text-fill: #ff884d;
+	-fx-font-size: 13px;
+	-fx-font-weight: bold;
+	-fx-font-family:Lucida Console;
+}
+
+#Username{
+	-fx-text-fill: #1a8cff;
+	-fx-font-size: 12px;
 	-fx-font-weight: bold;
 	
 }
+#Password{
+	-fx-text-fill: #1a8cff;
+	-fx-font-size: 12px;
+	-fx-font-weight: bold;
+}
+#Notification{
+	-fx-text-fill: #ff1a1a;
+	-fx-font-size: 13px;
+	-fx-font-weight: bold;
+}
+
+#Header{
+	-fx-text-fill:#0033cc;
+	-fx-font-size: 15px;
+	-fx-font-weight: bold;
+}
+
+#Mnozstvo{
+	-fx-text-fill: #1a8cff;
+	-fx-font-size: 12px;
+	-fx-font-weight: bold;
+}
+
+#Typ{
+	-fx-text-fill: #1a8cff;
+	-fx-font-size: 12px;
+	-fx-font-weight: bold;
+}
+

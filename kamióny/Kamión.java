@@ -4,10 +4,10 @@ import containers.Kontajner;
 
 public class Kamión extends Auto{
 	
-	private final int rychlost = 1;
+	private final int rychlost = 2;
 	private boolean PrivesFull;
 	
-	Prives prives;					//agregácia - príves
+	private Prives prives;					//agregácia - príves
 	
 	public Kamión(){
 		this.nalozeny=false;
@@ -28,6 +28,7 @@ public class Kamión extends Auto{
 		if(kontajner.zistiHmotnost()<6000){
 			if (nalozeny) {
 				prives.nalozPrives(kontajner);
+				this.PrivesFull=true;
 			}
 			else{
 				this.nalozeny=true;
@@ -35,11 +36,17 @@ public class Kamión extends Auto{
 		}
 	}
 	
-	/**
-	Zisti èi je príves naložený
-	*/
-	public boolean zistiNakladPrives(){
+	
+	// Funkcia zisti èi je príves naloženy
+	public boolean zistiNakladPrives() {
+		
 		return this.PrivesFull;
+	}
+
+	public int exportTime(int vzdialenost) {
+
+		this.cas = vzdialenost / rychlost;
+		return cas;
 	}
 	
 	

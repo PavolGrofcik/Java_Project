@@ -27,3 +27,6 @@ public abstract class Kontajner implements Serializable{
 //Vymysliet logiku v preprave kontajnerov, nakladanie kontajnerov, a zoskupi produkènı èas spolu s exportnym èasom.
 //Odrátavat cas vyroby loading bar1, odratavat celkovı cas loading bar 2(including prodTime)
 //Na konci objednávky by sa dalo urobi nieèo ako zlavovı kupón, ktoré budú uloené vo File neake èísla ak sa neaké bude zhodova tak sa odráta 5% z celkovej ceny(simply checkbox.setOnAction(e->...setvisible field)
+// Pre jednu hierarchiu dedenia dorobi poriadne JavaDoc dokumentaciu aby to bolo zmysluplné 
+//Dorobi správu o realizácii prejekt  2-3 strany, jednoduchy popis ako ako ktroé triedy fungujú plus dorobi Class Diagram in UML, vysvetlenie vzahov
+//Nieèo ako zhodnotenie 

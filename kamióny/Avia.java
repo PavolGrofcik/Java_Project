@@ -4,7 +4,7 @@ import containers.Kontajner;
 
 public class Avia extends Auto {
 
-	private final int rychlost = 1;		//rychlost neak od vzdialenosti
+	private final int rychlost = 1;		//Každý druh vozidla je špecifický svojou rýchlostou a nosnostou
 	
 	public Avia(){
 		this.nalozeny=false;
@@ -15,6 +15,11 @@ public class Avia extends Auto {
 		super.nalozAuto(kontajner);
 	}
 	
+	public int exportTime(int vzdialenost){
+		
+		this.cas = vzdialenost/rychlost;
+		return cas;
+	}
 	
 	
 }

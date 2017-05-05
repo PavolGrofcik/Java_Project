@@ -22,15 +22,16 @@ public class Transport extends Stage {
 	private Label country = new Label("Zvoæte Kraj");
 	private Label classtype = new Label("Trieda");
 	private Label info = new Label("Aktu·lny poËet");
-	private Label setupcargo = new Label("Naloû cargo");
+	private Label savaInfo = new Label("Uloûiù");
 	
 	private ComboBox<String> countrybox = new ComboBox<String>();														//Kraj SR
 	private ComboBox<String> type = new ComboBox<String>();																//Trieda 1./2.
 	
-	private Button load = new Button("Naloûiù");
 	private Button back = new Button("Sp‰ù");
+	private Button save = new Button("Uloûiù");
 	
 	private TextField number = new TextField();
+	
 	//private PoËet poËet;
 	public Transport(Objedn·vka objedn·vka){
 		
@@ -39,7 +40,7 @@ public class Transport extends Stage {
 		
 		root.setHgap(3);
 		root.setVgap(7);
-		root.getChildren().addAll(country,classtype,info,setupcargo,countrybox,type,load,back,number);
+		root.getChildren().addAll(country,classtype,info,countrybox,type,savaInfo,save,back,number);
 		
 		initModality(Modality.APPLICATION_MODAL);
 		//root.setAlignment(Pos.BASELINE_CENTER);
@@ -56,8 +57,8 @@ public class Transport extends Stage {
 		GridPane.setConstraints(type, 3, 2);
 		GridPane.setConstraints(info, 0, 3);
 		GridPane.setConstraints(number, 2, 3);
-		GridPane.setConstraints(setupcargo, 1, 4);
-		GridPane.setConstraints(load, 1, 5);
+		GridPane.setConstraints(savaInfo, 0, 4);
+		GridPane.setConstraints(save, 0, 5);
 		GridPane.setConstraints(back, 3, 6);
 		
 		countrybox.getItems().addAll("Bratislavsk˝", "Banskobystrick˝", "Koöick˝", "Nitriansky", "Preöovsk˝", "TrenËiansky", "Trnavsk˝", "éilinsk˝");
@@ -66,20 +67,38 @@ public class Transport extends Stage {
 		type.setPromptText("Typ");
 		
 		
+		// TlaËidlo naloûCargo zmazaù a premiestniù do Fin·lnej triedy
+		// Urobiù eöte Rtti do textarey, aspectj platba kartou, 
+		
+		save.setOnAction(e->{
+			try{
+			objedn·vka.saveTransport(countrybox.getSelectionModel().getSelectedItem(), type.getSelectionModel().getSelectedItem());
+			
+			}
+			catch (Exception e2){
+				
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Chyba");
+				alert.setHeaderText("Error");
+				alert.setContentText("Nevyplnili ste niektorÈ polia");									
+				alert.show();
+			}
+			
+		});
+		
+		
+		//metÛda tlaËidla sp‰ù
 		back.setOnAction(e->{
 
-			
 			Alert exit = new Alert(AlertType.CONFIRMATION);
-			exit.setTitle("UkonËiù?");
-			exit.setHeaderText("Chcete v·ûne zruöiù objedn·vku?");
-			exit.setContentText("Vöetky poloûky budu zmazanÈ\n Vyberte moûnosù");
+			exit.setTitle("Uloûiù");
+			exit.setHeaderText("Chcete uloûiù objedn·vku?");
+			exit.setContentText("Poloûky bud˙ uloûenÈ\n Vyberte moûnosù");
 			
 			Optional<ButtonType> result = exit.showAndWait();
 			
 			if(result.get() == ButtonType.OK){
 				
-				//zmaûe vöetok progres
-				objedn·vka.zmaû();
 				hide();
 				exit.close();
 			}

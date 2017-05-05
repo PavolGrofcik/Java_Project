@@ -9,6 +9,8 @@ public class Ubytovací extends Kontajner {
 	private String typ;
 	private int pocetOkien;
 	private boolean balkon;
+	
+	private Balcon Balcon;
 
 	// private inner Class Balcon, moná len pre Rodinny typ kontajnera, lepší spôsob namiesto Agregácie(global)
 	private class Balcon{
@@ -21,17 +23,12 @@ public class Ubytovací extends Kontajner {
 		
 	}
 	
-
-	public Ubytovací(int num) {
-		nastavCenu(num);
-		nastavProdT(num);
-	}
-	
 	//preaenie
 	public Ubytovací(int mnozstvo, String type, int windows) {
 		this.typ=type;
 		this.pocetOkien=windows;
 		this.balkon=false;
+		
 		if(typ.equalsIgnoreCase("Rodinnı")){
 			nastavCenu(-2+mnozstvo);										//Rodinnı je drahší typ
 			nastavProdT(mnozstvo);											//Avšak produkènı èas je rovnakı
@@ -45,18 +42,20 @@ public class Ubytovací extends Kontajner {
 	}
 	
 	public Ubytovací(int mnozstvo, String type, int windows, boolean balcon,boolean terrasa) {
+		
 		if(type.equals("Rodinnı")){
 			if (balcon) {
 				this.balkon=true;
 				this.typ=type;
 				this.pocetOkien=windows;
 				//nastavenie Balkonu s atributmi
-				newInstanceBalcon(terrasa);
+				Balcon=newInstanceBalcon(terrasa);
 				
-				nastavCenu(-5+mnozstvo);
-				nastavProdT(-5+mnozstvo);
+				nastavCenu(zmenMnozstvoParam(-5, mnozstvo));
+				nastavProdT(zmenMnozstvoParam(-5, mnozstvo));
 				zvysCenu(balcon, terrasa);
 				zvysCenu(windows);
+				
 			}else{
 				this.balkon=false;											//ak nie je zvolenı balkon
 				this.typ=type;
@@ -66,15 +65,6 @@ public class Ubytovací extends Kontajner {
 				zvysCenu(windows);
 			}
 		}
-		/*
-		else if(type.equals("Kancelársky")){
-			this.balkon=false;
-			this.typ=type;
-			this.pocetOkien=windows;
-			nastavCenu(mnozstvo);
-			nastavProdT(mnozstvo);
-			zvysCenu(windows);
-		}*/
 	}
 	
 

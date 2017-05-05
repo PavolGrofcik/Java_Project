@@ -21,14 +21,15 @@ import java.time.format.*;
 
 public class Second extends Stage {
 	
-	private Label lbl1 = new Label("Zvoæte typy kontajnerov");
+	private Label lbl1 = new Label("Zvoæte typ");
 	private Label notification = new Label("Aktu·lny poËet");
 	private Label date = new Label();
 	private Button pridaj = new Button("Pridaù");
 	private Button back = new Button("UkonËiù");
-	private Button delete = new Button("Zmazaù poloûky");
+	private Button delete = new Button("Zmazaù");
 	private Button nextScene = new Button("DokonËiù transport");
 	private Button saveFile = new Button("Uloûiù objedn·vku");
+	private Button finalizacia = new Button("Zaplatiù");
 	private ComboBox<String> box = new ComboBox<String>();
 	
 	private PoËet poËet;
@@ -37,11 +38,11 @@ public class Second extends Stage {
 	
 	
 
-	public static void vytvor(Button btn, int prefWidth,int prefHeight){
+	public void vytvor(Button btn, int prefWidth,int prefHeight){
 		btn.setPrefSize(prefWidth, prefHeight);
 	}
 	
-	public static void setposition(Button btn, int x, int y){
+	public void setposition(Button btn, int x, int y){
 		btn.setTranslateX(x);
 		btn.setTranslateY(y);
 		
@@ -55,21 +56,22 @@ public class Second extends Stage {
 		setTitle("Objedn·vka");
 		initModality(Modality.APPLICATION_MODAL);																	//zamkne okno
 	
-		root.getChildren().addAll(date,lbl1, box,pridaj, delete,saveFile,nextScene,back);								//pridanie tlaËidiel
+		root.getChildren().addAll(date,lbl1, box,pridaj, delete,saveFile,nextScene,finalizacia,back);								//pridanie tlaËidiel
 		root.setAlignment(Pos.CENTER);
 		
 		
 		lbl1.setPrefHeight(20);
 		lbl1.setTranslateX(0);
 		lbl1.setTranslateY(0);
-		lbl1.setFont(Font.font("Cambria",27));
-		lbl1.setTextFill(Color.SLATEBLUE);
+		lbl1.setId("Header2");
 		
-		notification.setFont(Font.font("Cambria", 18));
+		notification.setId("Aktual");
+		
+		//notification.setFont(Font.font("Cambria", 18));
 		date.setText(date2.format(DateTimeFormatter.ofPattern("dd.MM.y")));
 		date.setId("Date");
 
-		box.setPromptText("Zvoæ");
+		box.setPromptText("Typ");
 
 		poËet = new PoËet(objedn·vka);
 		objedn·vka.pridajSledovatela(poËet);
@@ -80,7 +82,25 @@ public class Second extends Stage {
 
 		box.getItems().addAll("Mraziarensk˝", "N·drû","Transportn˝","UbytovacÌ");
 	
-
+		finalizacia.setOnAction(e->{
+			
+			if(objedn·vka.zistiPoËet()==0){
+				
+				Alert chyba = new Alert(AlertType.INFORMATION);
+	
+				chyba.setTitle("Chyba");
+				chyba.setHeaderText("Pr·zdny koöÌk");
+				chyba.setContentText("Nezvolili ste ûiaden typ kontajnerov");
+				chyba.show();
+			}
+			else{
+				new Third(objedn·vka,poËet);
+			}
+			
+		});
+		
+		
+		
 		pridaj.setOnAction(e -> {																				 		// Inicializacia tlacidla VYTVOR
 			//prÌkaz switch namiesto if-else, kvÙli objektovej paradigme
 			try {
@@ -104,11 +124,11 @@ public class Second extends Stage {
 				}
 				
 			} catch (Exception e2) {
-				Alert b = new Alert(AlertType.ERROR); 	// chyba pri nezadanÌ typu kontajnera
+				Alert b = new Alert(AlertType.ERROR);
 														
 				b.setTitle("Chyba");
 				b.setHeaderText("Error!");
-				b.setContentText("Nezadali ste typ kontajnera");
+				b.setContentText("Nezvolili ste ûiaden typ kontajnerov");
 				b.show();
 			}
 			finally {
@@ -140,7 +160,22 @@ public class Second extends Stage {
 		});
 		
 		nextScene.setOnAction(e-> {										//ukonËenie aktu·lneho frame-u a preskoËenie do Third
-		new Transport(objedn·vka);
+			switch (objedn·vka.getPocetKontajnerov()) {
+			case 0:
+				Alert alert2 = new Alert(AlertType.INFORMATION);
+				alert2.setTitle("Chyba");
+				alert2.setHeaderText("Pr·zdny koöÌk");
+				alert2.setContentText("Nezvolili ste ûiaden typ kontajnerov"); 	// Alert
+																			// pre
+																			// GeneralException
+				alert2.show();
+
+				break;
+
+			default:
+				new Transport(objedn·vka);
+				break;
+			}
 		//new Third(objedn·vka);
 		//hide();	
 		});
