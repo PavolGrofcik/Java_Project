@@ -1,15 +1,14 @@
 
 #Date{
-	-fx-text-fill: #ff3333;
+	-fx-text-fill: #6666ff;
 	-fx-font-size: 20px;
-	-fx-font-weight: bold;
+	/*-fx-font-weight: bold;*/
 	-fx-font-family: Lucida Sans Unicode;
 }
 
 #Header2{
-	-fx-text-fill: #1a8cff;
+	-fx-text-fill: #bf00ff;
 	-fx-font-size: 18px;
-	-fx-font-weight: bold;
 	-fx-font-family: Lucida Sans Unicode;
 	
 }
@@ -54,5 +53,10 @@
 	-fx-text-fill: #1a8cff;
 	-fx-font-size: 12px;
 	-fx-font-weight: bold;
+}
+
+#Header3{
+	-fx-font-size:15px;
+	-fx-text-fill:#ff9900;
 }
 

@@ -1,5 +1,6 @@
 package controller;
 
+import java.beans.Transient;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -8,6 +9,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.ListIterator;
+
+import javax.annotation.Resource;
+import javax.swing.table.TableModel;
+
+import org.omg.CORBA.INV_FLAG;
+
 import containers.Kontajner;
 import containers.Mraziarenskı;
 import containers.Nádr;
@@ -20,8 +29,9 @@ import kamióny.Prives;
 
 public class Objednávka implements Serializable{
 	/**
-	 * 
+	 * Author Pavol Grofèík
 	 */
+	
 	private static final long serialVersionUID = 1L;
 	
 	
@@ -31,14 +41,15 @@ public class Objednávka implements Serializable{
 	private int Vzdialenost=0;		//km
 	private String Trieda=null;
 	private String Kraj=null;
+	private String Mesto=null; // DOROBI pri kadom kraji sa vyberú mestá!!! pole stringov pre jednotlivı kraj
 
 	
 	
 	private ArrayList<Kontajner> myList = ListCreator.Listcreate();
 	private ArrayList <Auto> cars = ListCreator.Listcreate();
 	
-	transient private ArrayList<SledovatelObjednavky> sledovatelia = new ArrayList<>();						//transient arraylist na uchovovávanie sledovatelov kontajnerov
 	
+	transient private ArrayList<SledovatelObjednavky> sledovatelia = new ArrayList<>();						//transient arraylist na uchovovávanie sledovatelov kontajnerov
 	
 	//implicitné nastavenie poètu vozidiel pri vytvorení objednávky
 	public Objednávka(){
@@ -48,7 +59,6 @@ public class Objednávka implements Serializable{
 		} catch (NesprávnyTypVozidla e) {
 		}
 	}
-	
 	
 	//Observer -> metódy
 	
@@ -68,15 +78,40 @@ public class Objednávka implements Serializable{
 
 	
 	//Dorobi transport
-
+	
+	public void NalozKontajnery(int vzdialenost){
+		
+		//pre tuto vzdialenost sa prvorade vyuijú avie, kvôli tomu e odväzú menej a majú aj menšiu rıchlos
+		if(vzdialenost<200){
+			
+			
+			
+			
+		}else /*if(vzdialenost>=200)*/{
+			
+			
+			
+			
+			
+		}
+		
+	}
+	
+	
+	
+	
 	
 	//Metóda na upresnenie špecifikácií
-	public void saveTransport(String vzdialenost, String typZasielky){
+	public void saveTransport(String vzdialenost, String typZasielky, String mesto){
+		
 		this.Kraj=vzdialenost;															//Trieda si zapamätá kraj, ktorı si zvolil zákazník
+		this.Mesto=mesto;
 		
 		switch(typZasielky){
+		
 		case "1.":	setVzdialenost(vzdialenost);
 					this.Trieda=typZasielky;
+					addCena(200); 														//Prvá trieda je o 200 € drhašia kvôli rıchlejšej produkcii
 					break;
 		case "2.": setVzdialenost(vzdialenost);
 					this.Trieda=typZasielky;
@@ -164,7 +199,6 @@ public class Objednávka implements Serializable{
 		
 		}
 		else if (stage.equals("TranStage")) {																	// kontrola pre Transportnı kontajner
-			
 			//Vlastná Vınimka Nespravny rozsah
 			if(rozsah<2 || rozsah >10){
 				throw new NespravnyRozsah();
@@ -202,6 +236,7 @@ public class Objednávka implements Serializable{
 			case "UbytStage":
 				if ((rozsah < 1 || rozsah > 5) && mnozstvo < 2) {
 					throw new NespravnyRozsah();
+					
 				} else if (balcon) {
 					for (int i = 0; i < mnozstvo; i++) {
 						myList.add(new Ubytovací(mnozstvo, kontajner, rozsah, balcon, terrace));
@@ -221,19 +256,84 @@ public class Objednávka implements Serializable{
 		}
 	}
 	
-	public int rti(Objednávka objednávka, Kontajner kontajner){															//RTTI
+	public int rtti(Objednávka objednávka, String druh){															//RTTI
 		
 		int number=0;
+		Kontajner pomocny;
 		
 		for(int i =0; i<objednávka.zistiPoèet();i++){
-			Kontajner kontajner2;
-			kontajner2=objednávka.myList.get(i);				
-			if (kontajner2.equals(kontajner)) {
-			number++;	
+			
+			pomocny=objednávka.myList.get(i);
+			
+			switch (druh) {
+			case "Ubytovací":
+				if (pomocny instanceof Ubytovací){
+					number++;
+					}
+				break;
+			case "Transportnı":
+				if(pomocny instanceof Transportnı){
+					number++;
+				}
+				break;
+			case "Mraziarenskı":
+				if(pomocny instanceof Mraziarenskı){
+					number++;
+				}
+				break;
+			case "Nádr":
+				if (pomocny instanceof Nádr) {
+					number++;
+				}
+				break;
 			}
 		}
-		return number;																							//zapis do suboru number poèet a danı Clas get object?	
+		return number;																							//vráti aktuálny poèet kontajnerov daného typu
 	}
+	
+	public String kontajnerInfo(String typ) throws ObjectNotFound{
+		
+		Kontajner pomocny=null;
+		String temp=null;
+		
+		for(int i=0; i<myList.size();i++){																		//preh¾adávanie celého listu objednávky
+			
+			pomocny=myList.get(i);																				//priradenie kontajneru v liste s indexom i do pomocnej premenej, odkial dostaneme poadované informácie
+			
+			//Prehladavanie pommocou názvu kontajnera, vyuitím funkcie substring ktorá vracia runtime nazov od zac indexu do end indexu, viï oracle.docs....
+			
+			//Nádr
+			if(pomocny.toString().substring(11, 16).equals(typ)){
+				temp= "Hmotnos: " + Integer.toString(pomocny.zistiHmotnost()) + " kg\n"+ "Záruka: " + Integer.toString(pomocny.zistiZaruku()) +  " rokov" + "\n" + "Cena: " + Integer.toString(pomocny.zistiCenu()) + " €\n";
+				return temp;
+			}
+			//Transportnı
+			else if(pomocny.toString().substring(11, 22).equals(typ)){
+				temp= "Hmotnos: " + Integer.toString(pomocny.zistiHmotnost()) + " kg\n"+ "Záruka: " + Integer.toString(pomocny.zistiZaruku()) +  " rokov" + "\n" + "Cena: " + Integer.toString(pomocny.zistiCenu()) + " €\n";
+				return temp;
+			}
+			//Ubytovací
+			else if(pomocny.toString().substring(11, 20).equals(typ)){
+				temp= "Hmotnos: " + Integer.toString(pomocny.zistiHmotnost()) + " kg\n"+ "Záruka: " + Integer.toString(pomocny.zistiZaruku()) +  " rokov" + "\n" + "Cena: " + Integer.toString(pomocny.zistiCenu()) + " €\n";
+				return temp;
+			}
+			//Mraziarenskı
+			else if(pomocny.toString().substring(11, 23).equals(typ)){
+				temp= "Hmotnos: " + Integer.toString(pomocny.zistiHmotnost()) + " kg\n"+ "Záruka: " + Integer.toString(pomocny.zistiZaruku()) +  " rokov" + "\n" + "Cena: " + Integer.toString(pomocny.zistiCenu()) + " €\n";
+				return temp;
+			}
+		}
+		throw new ObjectNotFound();																				//Ak sa zvolenı typ kontajnera nenachádza v arraliste, vyhodí sa vlastná vınimka
+	}
+	
+	
+	public String ObjednavkaInfo(){
+		
+		//Zobrazí podrobné informácie o 
+		return "Mesto: " + Mesto + "\n" + "Vzdialenos " + Integer.toString(Vzdialenost) +  " km" + "\n" + "Celková cena: " + Integer.toString(zistiCenu(this))+ " €" + "\n" + "Produkènı èas: "
+		+ Integer.toString(zistiPocetDni(this)) + " Dní";
+	}
+	
 	
 	
 	
@@ -246,6 +346,7 @@ public class Objednávka implements Serializable{
 		if(!myList.isEmpty()){																					//iba ak u v sebe obsahuje poloky
 			
 			this.PocetKontajnerov=0;																			//Aktualizuje observera - aktuálny poèet kontajnerov
+			this.Vzdialenost=0;
 			
 			myList.clear();
 			myList.trimToSize();
@@ -257,7 +358,7 @@ public class Objednávka implements Serializable{
 	
 	public void uloz(File subor) throws ClassNotFoundException, IOException {									//uloenie objednávky do súboru FILE
 		try{
-		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(subor.getAbsolutePath()));			
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(subor.getAbsolutePath()));
 		out.writeObject(myList);
 		out.close();
 		} catch (Exception e) {
@@ -313,9 +414,24 @@ public class Objednávka implements Serializable{
 	}
 	
 	public int zistiPocetDni(Objednávka list){
-		int dni = (int) zistiCas(list)/24;																		//volanie metódy zisti cas, ktorá vráti celkovı èas a naslédne sa vydeli konštantou 24 aby sa zistil
-		this.PocetDni+=dni; 																					//Pripoèíta k celkovım dnom vıroby
-		return dni;	
+		
+		int dni=0;
+		int tyzdne=0;
+		
+		if(Trieda.equals("1.")){
+			addCena(200);
+			dni = (int) zistiCas(list)/24;																		//volanie metódy zisti cas, ktorá vráti celkovı èas a naslédne sa vydeli konštantou 24 aby sa zistil
+			tyzdne=dni/7;
+			this.PocetDni+=dni; 																				//Pripoèíta k celkovım dnom vıroby
+			dni-=(tyzdne*2);
+			return dni;																				//Prvá trieda sa produkuje nonstop 7D/24H, teda aj cez víkend
+		}
+		else{
+			dni = (int) zistiCas(list)/24;
+			this.PocetDni+=dni;
+			return dni;
+			
+		}
 	}
 	
 	//metóda zistí aktuálny poèet dni
@@ -329,13 +445,14 @@ public class Objednávka implements Serializable{
 	}
 
 	public void addCena(int delta){
-		this.TotalCena+=delta;
+		TotalCena+=delta;
 	}
 	
 	public void setVzdialenost(String kraj){
 		
 		//podla kraju sa jednotlivo urèuje vzdialenost
 		//Záleí aj od toho cena, jednotlive kraje majú rôzne ceny
+		
 		switch (kraj) {
 		case "Bratislavskı": this.Vzdialenost=100;
 							addCena(100);
@@ -366,6 +483,9 @@ public class Objednávka implements Serializable{
 	
 	public int getCars(){
 		return cars.size();
+	}
+	public int getVzdialenost(){
+		return this.Vzdialenost;
 	}
 	
 }

@@ -22,17 +22,29 @@ public class Transport extends Stage {
 	private Label country = new Label("Zvoæte Kraj");
 	private Label classtype = new Label("Trieda");
 	private Label info = new Label("Aktu·lny poËet");
-	private Label savaInfo = new Label("Uloûiù");
+	private Label saveInfo = new Label("Uloûiù");
+	private Label mesto = new Label("Mesto");
+	
 	
 	private ComboBox<String> countrybox = new ComboBox<String>();														//Kraj SR
 	private ComboBox<String> type = new ComboBox<String>();																//Trieda 1./2.
+	private ComboBox<String> city = new ComboBox<String>();																//Mesto
 	
 	private Button back = new Button("Sp‰ù");
 	private Button save = new Button("Uloûiù");
 	
 	private TextField number = new TextField();
 	
-	//private PoËet poËet;
+	private String [] BA = {"Bratislava", "Pezinok", "Malacky"};
+	private String [] TT = {"Trnava", "Galanta", "Senica"};
+	private String [] TN = {"TrenËÌn", "Prievidza", "P˙chov"};
+	private String [] NR = {"Nitra", "Kom·rno", "Levice"};
+	private String [] BB = {"Bansk· Bystrica", "RoûÚava", "Fiæakovo"};
+	private String [] ZA = {"éilina", "Martin", "TvrdoöÌn"};
+	private String [] PE = {"Preöov", "Stropkov", "HumennÈ"};
+	private String [] KE = {"Koöice", "Michalovce", "VyönÈ NemeckÈ"};
+	
+
 	public Transport(Objedn·vka objedn·vka){
 		
 		super();
@@ -40,7 +52,7 @@ public class Transport extends Stage {
 		
 		root.setHgap(3);
 		root.setVgap(7);
-		root.getChildren().addAll(country,classtype,info,countrybox,type,savaInfo,save,back,number);
+		root.getChildren().addAll(country,classtype,info,countrybox,type,saveInfo,save,back,number,mesto,city);
 		
 		initModality(Modality.APPLICATION_MODAL);
 		//root.setAlignment(Pos.BASELINE_CENTER);
@@ -57,33 +69,154 @@ public class Transport extends Stage {
 		GridPane.setConstraints(type, 3, 2);
 		GridPane.setConstraints(info, 0, 3);
 		GridPane.setConstraints(number, 2, 3);
-		GridPane.setConstraints(savaInfo, 0, 4);
+		GridPane.setConstraints(saveInfo, 0, 4);
 		GridPane.setConstraints(save, 0, 5);
 		GridPane.setConstraints(back, 3, 6);
+		GridPane.setConstraints(mesto, 0, 1);
+		GridPane.setConstraints(city, 3, 1);
+		
+		mesto.setVisible(false);
+		city.setPromptText("Mesto");
+		city.setVisible(false);
 		
 		countrybox.getItems().addAll("Bratislavsk˝", "Banskobystrick˝", "Koöick˝", "Nitriansky", "Preöovsk˝", "TrenËiansky", "Trnavsk˝", "éilinsk˝");
 		countrybox.setPromptText("Kraj");
 		type.getItems().addAll("1.", "2.");
 		type.setPromptText("Typ");
 		
+		countrybox.setOnAction(e -> {
+
+			if (!city.getSelectionModel().isEmpty()) {
+				
+				city.getSelectionModel().clearSelection();
+				city.getItems().clear();
+			
+				switch (countrybox.getSelectionModel().getSelectedItem()) {
+
+				case "Bratislavsk˝":
+					mesto.setVisible(true);
+					city.setVisible(true);
+					city.getItems().addAll(BA);
+					break;
+
+				case "Banskobystrick˝":
+					mesto.setVisible(true);
+					city.setVisible(true);
+					city.getItems().addAll(BB);
+					break;
+				case "Koöick˝":
+					mesto.setVisible(true);
+					city.setVisible(true);
+					city.getItems().addAll(KE);
+					break;
+				case "Nitriansky":
+					mesto.setVisible(true);
+					city.setVisible(true);
+					city.getItems().addAll(NR);
+					break;
+				case "Preöovsk˝":
+					mesto.setVisible(true);
+					city.setVisible(true);
+					city.getItems().addAll(PE);
+					break;
+				case "TrenËiansky":
+					mesto.setVisible(true);
+					city.setVisible(true);
+					city.getItems().addAll(TN);
+					break;
+				case "Trnavsk˝":
+					mesto.setVisible(true);
+					city.setVisible(true);
+					city.getItems().addAll(TT);
+					break;
+				case "éilinsk˝":
+					mesto.setVisible(true);
+					city.setVisible(true);
+					city.getItems().addAll(ZA);
+					break;
+				}
+			}
+			else{
+				
+				city.getSelectionModel().clearSelection();
+				city.getItems().clear();
+				
+				switch (countrybox.getSelectionModel().getSelectedItem()) {
+
+				case "Bratislavsk˝":
+					mesto.setVisible(true);
+					city.setVisible(true);
+					city.getItems().addAll(BA);
+					break;
+
+				case "Banskobystrick˝":
+					mesto.setVisible(true);
+					city.setVisible(true);
+					city.getItems().addAll(BB);
+					break;
+				case "Koöick˝":
+					mesto.setVisible(true);
+					city.setVisible(true);
+					city.getItems().addAll(KE);
+					break;
+				case "Nitriansky":
+					mesto.setVisible(true);
+					city.setVisible(true);
+					city.getItems().addAll(NR);
+					break;
+				case "Preöovsk˝":
+					mesto.setVisible(true);
+					city.setVisible(true);
+					city.getItems().addAll(PE);
+					break;
+				case "TrenËiansky":
+					mesto.setVisible(true);
+					city.setVisible(true);
+					city.getItems().addAll(TN);
+					break;
+				case "Trnavsk˝":
+					mesto.setVisible(true);
+					city.setVisible(true);
+					city.getItems().addAll(TT);
+					break;
+				case "éilinsk˝":
+					mesto.setVisible(true);
+					city.setVisible(true);
+					city.getItems().addAll(ZA);
+					break;
+				}
+			}
+			
+		});
+		
+		
+		
 		
 		// TlaËidlo naloûCargo zmazaù a premiestniù do Fin·lnej triedy
 		// Urobiù eöte Rtti do textarey, aspectj platba kartou, 
 		
-		save.setOnAction(e->{
-			try{
-			objedn·vka.saveTransport(countrybox.getSelectionModel().getSelectedItem(), type.getSelectionModel().getSelectedItem());
-			
-			}
-			catch (Exception e2){
-				
+		save.setOnAction(e -> {
+			try {
+
+				objedn·vka.saveTransport(countrybox.getSelectionModel().getSelectedItem(),
+				type.getSelectionModel().getSelectedItem(), city.getSelectionModel().getSelectedItem());
+
+				Alert info = new Alert(AlertType.INFORMATION);
+
+				info.setTitle("UloûenÈ");
+				info.setHeaderText("⁄daje boli uloûenÈ");
+				info.setContentText("DokonËite objedn·vku");
+				info.show();
+
+			} catch (Exception e2) {
+
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Chyba");
 				alert.setHeaderText("Error");
-				alert.setContentText("Nevyplnili ste niektorÈ polia");									
+				alert.setContentText("Nevyplnili ste niektorÈ polia");
 				alert.show();
 			}
-			
+
 		});
 		
 		

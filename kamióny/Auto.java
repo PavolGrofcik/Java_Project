@@ -24,7 +24,7 @@ public class Auto {
 	public int zistiNosnost(){
 		return nosnost;
 	}
-	
+
 	
 	public void nalozAuto(Kontajner kontajner){
 		if (kontajner.zistiHmotnost()<=5000) {

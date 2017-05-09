@@ -73,11 +73,6 @@ public class Transportný extends Kontajner implements Atributy {
 		return this.hmotnost;
 	}
 	
-	public void nastavNosnost(int vaha){
-		if (vaha<5000) {
-			this.nosnost=vaha;
-		}
-	}
 	
 	public int zistiNosnost(){
 		return this.nosnost;

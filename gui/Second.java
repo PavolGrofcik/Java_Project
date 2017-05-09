@@ -26,10 +26,10 @@ public class Second extends Stage {
 	private Label date = new Label();
 	private Button pridaj = new Button("Pridaù");
 	private Button back = new Button("UkonËiù");
-	private Button delete = new Button("Zmazaù");
-	private Button nextScene = new Button("DokonËiù transport");
+	private Button delete = new Button("Zmazaù objedn·vku");
+	private Button transport = new Button("DokonËiù transport");
 	private Button saveFile = new Button("Uloûiù objedn·vku");
-	private Button finalizacia = new Button("Zaplatiù");
+	private Button finalizacia = new Button("Platba");
 	private ComboBox<String> box = new ComboBox<String>();
 	
 	private PoËet poËet;
@@ -54,9 +54,9 @@ public class Second extends Stage {
 		
 		VBox root = new VBox(5);
 		setTitle("Objedn·vka");
-		initModality(Modality.APPLICATION_MODAL);																	//zamkne okno
+		initModality(Modality.APPLICATION_MODAL);
 	
-		root.getChildren().addAll(date,lbl1, box,pridaj, delete,saveFile,nextScene,finalizacia,back);								//pridanie tlaËidiel
+		root.getChildren().addAll(date,lbl1, box,pridaj, delete,saveFile,transport,finalizacia,back);								//pridanie tlaËidiel
 		root.setAlignment(Pos.CENTER);
 		
 		
@@ -84,13 +84,13 @@ public class Second extends Stage {
 	
 		finalizacia.setOnAction(e->{
 			
-			if(objedn·vka.zistiPoËet()==0){
+			if(objedn·vka.getVzdialenost()==0){
 				
 				Alert chyba = new Alert(AlertType.INFORMATION);
 	
 				chyba.setTitle("Chyba");
-				chyba.setHeaderText("Pr·zdny koöÌk");
-				chyba.setContentText("Nezvolili ste ûiaden typ kontajnerov");
+				chyba.setHeaderText("Transport");
+				chyba.setContentText("Nezvolili ste miesto doruËenia");
 				chyba.show();
 			}
 			else{
@@ -159,7 +159,7 @@ public class Second extends Stage {
 			
 		});
 		
-		nextScene.setOnAction(e-> {										//ukonËenie aktu·lneho frame-u a preskoËenie do Third
+		transport.setOnAction(e-> {										//ukonËenie aktu·lneho frame-u a preskoËenie do Third
 			switch (objedn·vka.getPocetKontajnerov()) {
 			case 0:
 				Alert alert2 = new Alert(AlertType.INFORMATION);
@@ -208,6 +208,7 @@ public class Second extends Stage {
 		});
 		
 		getIcons().add(new Image(getClass().getResourceAsStream("/resources/icon.jpg")));
+		
 		Scene scene = new Scene(root, 450, 450); 
 		scene.getStylesheets().add(this.getClass().getResource("Design.css").toExternalForm());
 		setScene(scene);

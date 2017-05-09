@@ -12,7 +12,7 @@ public class Ubytovací extends Kontajner {
 	
 	private Balcon Balcon;
 
-	// private inner Class Balcon, moná len pre Rodinny typ kontajnera, lepší spôsob namiesto Agregácie(global)
+	// private inner Class Balcon, moná len pre Rodinny typ kontajnera, lepší spôsob namiesto Agregácie(global), vytvára sa len pri Rodinnom type, inak niè
 	private class Balcon{
 		
 		private boolean Terasa;
@@ -30,8 +30,8 @@ public class Ubytovací extends Kontajner {
 		this.balkon=false;
 		
 		if(typ.equalsIgnoreCase("Rodinnı")){
-			nastavCenu(-2+mnozstvo);										//Rodinnı je drahší typ
-			nastavProdT(mnozstvo);											//Avšak produkènı èas je rovnakı
+			nastavCenu(-2+mnozstvo);										//Rodinnı typ je drahší ako kancelársky
+			nastavProdT(mnozstvo);											//Avšak produkènı èas je rovnakı ako pri kancelárskom
 			zvysCenu(windows);
 		}
 		else if(typ.equalsIgnoreCase("Kancelársky")){
@@ -80,12 +80,12 @@ public class Ubytovací extends Kontajner {
 		}
 	}
 	
-	public int zmenMnozstvoParam(int number, int curr){
-		return number+curr;
-	}
-	
 	public void zvysCenu(int windows){
 		cena+=(windows*50);				//1 okno = 50€;
+	}
+	
+	public int zmenMnozstvoParam(int number, int curr){
+		return number+curr;
 	}
 	
 	public Balcon newInstanceBalcon(boolean withTerrace){							//ak uívatel zvolí monos Balcon
@@ -119,6 +119,20 @@ public class Ubytovací extends Kontajner {
 	@Override
 	public int zistiHmotnost() {
 		return this.hmotnost;
+	}
+	
+	public boolean zistiBalkon(){												//metóda zistí èi si uívate¾ zvoli balkón
+		return this.balkon;
+	}
+	
+	public boolean zistiTerasu(){												//metóda zistí ak si uívate¾ zvolil s balkónom terasu
+		
+		if(this.balkon == true){
+			return Balcon.Terasa;
+		}
+		else{
+			return false;
+		}
 	}
 
 }
