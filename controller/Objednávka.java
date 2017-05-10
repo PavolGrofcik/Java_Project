@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.PrimitiveIterator.OfDouble;
 
 import javax.annotation.Resource;
 import javax.swing.table.TableModel;
@@ -37,22 +38,24 @@ public class Objednávka implements Serializable{
 	
 	private int PocetKontajnerov = 0;
 	private int PocetDni=0;
-	private int TotalCena=0;
+	private int TotalCena=0;		//€
 	private int Vzdialenost=0;		//km
 	private String Trieda=null;
 	private String Kraj=null;
-	private String Mesto=null; // DOROBI pri kadom kraji sa vyberú mestá!!! pole stringov pre jednotlivı kraj
+	private String Mesto=null;
 
+	private String[] kupon = {"0000", "1111", "2222", "123456789"};											//Zlavovı kupón ktorı obsahuje akceptujúce hodnoty	kupónov									
 	
 	
 	private ArrayList<Kontajner> myList = ListCreator.Listcreate();
 	private ArrayList <Auto> cars = ListCreator.Listcreate();
 	
 	
-	transient private ArrayList<SledovatelObjednavky> sledovatelia = new ArrayList<>();						//transient arraylist na uchovovávanie sledovatelov kontajnerov
+	transient private ArrayList<SledovatelObjednavky> sledovatelia = new ArrayList<>();						//arraylist na uchovovávanie sledovatelov kontajnerov, neuchováva sa pri uloení do súboru
 	
 	//implicitné nastavenie poètu vozidiel pri vytvorení objednávky
 	public Objednávka(){
+		
 		try {
 			addCars(10, "Kamión");
 			addCars(10, "Avia");
@@ -67,6 +70,7 @@ public class Objednávka implements Serializable{
 	}
 
 	public void upovedomSledovatelov() {
+		
 		for (SledovatelObjednavky s : sledovatelia) {
 			s.upovedom();
 		}
@@ -75,28 +79,235 @@ public class Objednávka implements Serializable{
 	public int getPocetKontajnerov() {
 		return this.PocetKontajnerov;
 	}
+	
+	public void setPocetDni(int num){
+		this.PocetDni+=num;
+	}
+	
+	public void setCena(){
+		TotalCena = (int) (TotalCena * 0.9);
+	}
 
+	//znii cenu o 5 %
+	public boolean zlavovyKupon(String kupon){
+		String pom=null;
+		
+		for(int i=0;i<this.kupon.length;i++){
+			pom= this.kupon[i];
+			if(pom.equals(kupon)){
+				
+				setCena();
+				//this.TotalCena*=0.95;
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void kalibrujPocetKonAndAut(){
+		if(PocetKontajnerov>30){
+			int pom = PocetKontajnerov-30;
+			try {
+				addCars(pom, "Avia");
+				addCena(pom*300);																					//Vypoíèa nové vozidlá a pridá aj cenu €
+			} catch (NesprávnyTypVozidla e) {
+				
+			}
+		}
+	}
 	
 	//Dorobi transport
 	
-	public void NalozKontajnery(int vzdialenost){
+	public int NalozKontajnery(int vzdialenost){
 		
-		//pre tuto vzdialenost sa prvorade vyuijú avie, kvôli tomu e odväzú menej a majú aj menšiu rıchlos
-		if(vzdialenost<200){
+		//pomocné premenné
+		Kontajner kontajner;
+		Auto auto;
+		Avia avia;
+		Kamión kamión;
+		
+		int number=0;
+		int pocetVozidiel=0;
+		
+		
+		//Najprv nakalibruje poèet kontajnerov a áut
+		//automatickı prida
+		kalibrujPocetKonAndAut();
+		
+		//pre tuto vzdialenost sa v prvorade vyuijú avie, kvôli tomu e odväzú menej a majú aj menšiu rıchlos
+		if (vzdialenost < 200) {
+			//aktualizácia total pocet dni
+			setPocetDni(2);
+			//PocetDni = PocetDni + 2;
+			for (int j = 0; j < cars.size(); j++) {
+				auto = cars.get(j);
+
+				if (number == PocetKontajnerov) {
+					break;
+				}
+
+				for (int i = 0; i < myList.size(); i++) {
+
+					kontajner = myList.get(i);
+					if (number == PocetKontajnerov) {
+						break;
+					}
+					if (auto instanceof Avia) {
+						avia=(Avia) auto;
+						if (!auto.zistiNalozeny()) {
+							auto.nalozAuto(kontajner);
+							number++;
+							pocetVozidiel++;
+							break;
+
+						} else {
+							break;
+						}
+					} else {
+						break;
+					}
+				}
+			}
+
+			if (number == PocetKontajnerov) {
+				return pocetVozidiel;
+			}
+
+			else {
+
+				for (int k = 0; k < cars.size(); k++) {
+					
+					auto = cars.get(k);
+					
+					if (number == PocetKontajnerov){
+						break;
+					}
+				
+					for (int i = 0; i < myList.size(); i++) {
+
+						if (number == PocetKontajnerov){
+							break;
+						}
+						
+						kontajner = myList.get(i);
+
+						if (auto instanceof Kamión) {
+							
+							kamión = (Kamión) auto;
+							//PocetDni+= kamión.ExportTime(vzdialenost);
+							if (!kamión.zistiNalozeny()) {
+								kamión.nalozAuto(kontajner);
+								number++;
+								if(number==PocetKontajnerov){
+									pocetVozidiel++;
+								}
+								
+							} else if (kamión.zistiNaklad()){
+								pocetVozidiel++;
+								break;
+							}
+						}
+						else {
+							break;
+						}
+					}
+				}
+				return pocetVozidiel;
+			}
+
+		} else /* if(vzdialenost>=200) */ {
+			//this.PocetDni +=3;
+			setPocetDni(3);
 			
+			if(number!=PocetKontajnerov){
+			// uprednostnujeme kamióny
+			for (int i = 0; i < cars.size(); i++) {
+				auto = cars.get(i);
+
+				if (number == PocetKontajnerov) {
+					return pocetVozidiel;
+				}
+				
+				for (int j = 0; j < myList.size(); j++) {
+					kontajner = myList.get(j);
+
+					if (number == PocetKontajnerov) {
+						break;
+					}
+					if (auto instanceof Kamión) {
+						kamión = (Kamión) auto;
+						//PocetDni+= kamión.ExportTime(vzdialenost);
+						//pocetVozidiel++;
+						
+						if (!kamión.zistiNaklad()) {
+							kamión.nalozAuto(kontajner);
+							number++;
+							if(number==PocetKontajnerov){
+								pocetVozidiel++;
+							}
+						}
+						else if (kamión.zistiNaklad()){
+							pocetVozidiel++;
+							break;
+						}
+						//if (kamión.zistiNaklad()) {
+						//	pocetVozidiel++;
+							//break;
+						}
+					else {
+						break;
+					}
+					
+					}
+				}
+
+			}
 			
-			
-			
-		}else /*if(vzdialenost>=200)*/{
-			
-			
-			
-			
-			
+			/*if(number == PocetKontajnerov){
+				return pocetVozidiel;
+			}*/
+			 if(number!=PocetKontajnerov){
+				// Kamióny sa vyèerpali, treba naloi Avie
+				for (int j = 0; j < cars.size(); j++) {
+					auto = cars.get(j);
+
+					if (number == PocetKontajnerov) {
+						break;
+					}
+
+					for (int i = 0; i < myList.size(); i++) {
+
+						kontajner = myList.get(i);
+						if (number == PocetKontajnerov) {
+							break;
+						}
+						if (auto instanceof Avia) {
+							avia = (Avia) auto;
+							
+							//PocetDni+= avia.ExportTime(vzdialenost);
+							
+							if (!avia.zistiNalozeny())
+								avia.nalozAuto(kontajner);
+								number++;
+								pocetVozidiel++;
+								break;
+						}
+						else {
+							break;
+						}
+					}
+				}
+				return pocetVozidiel;
+				
+			}
+			if(number== PocetKontajnerov) {
+				return pocetVozidiel;
+			}
+			return pocetVozidiel;
+
 		}
-		
+
 	}
-	
 	
 	
 	

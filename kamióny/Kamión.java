@@ -27,9 +27,9 @@ public class Kamión extends Auto implements Export{
 	public void nalozAuto(Kontajner kontajner){				//prekonávajúca metóda
 	
 		if(kontajner.zistiHmotnost()<6000){
-			if (nalozeny) {
-				prives.nalozPrives(kontajner);
+			if (!PrivesFull) {
 				this.PrivesFull=true;
+				prives.nalozPrives(kontajner);
 			}
 			else{
 				this.nalozeny=true;

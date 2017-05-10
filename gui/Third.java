@@ -1,5 +1,8 @@
 package gui;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import containers.UbytovacÌ;
 import controller.NespravnyRozsah;
 import controller.ObjectNotFound;
@@ -10,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -28,12 +32,15 @@ public class Third extends Stage {
 	private Button kosik = new Button("KoöÌk");
 	private Button info = new Button("Zobraz info");
 	private Button cena = new Button("Cena");
+	private Button zmenCenu = new Button("K˙pon");
+	private Button odosli = new Button("Odoslaù");
+	
+	private TextField kupon = new TextField();
 	
 	private ComboBox<String> typ = new ComboBox<String>();
-	
+	private LocalDate date = LocalDate.now();
 	
 	private Objedn·vka objedn·vka;
-	private PoËet poËet;
 	
 	//Generic method for Nodes
 		public void setPosition(Node node, int x, int y){
@@ -53,27 +60,33 @@ public class Third extends Stage {
 			return (line+ newline + container + druh + space + newline + pom + objedn·vka.rtti(objedn·vka, druh) + newline + newline);
 		}
 	
-	public Third(Objedn·vka parameter, PoËet parameter2){																//parametrom je arralist s objektami rÙznych kontajnerov, v tejto Ëasti sa dokonËÌ objedn·vka: t.j zistÌ celkovÈ ceny, Ëas...
+	public Third(Objedn·vka parameter){																//parametrom je arralist s objektami rÙznych kontajnerov, v tejto Ëasti sa dokonËÌ objedn·vka: t.j zistÌ celkovÈ ceny, Ëas...
 		
 		super();
 		
 		Pane root = new Pane();
 		
 		this.objedn·vka=parameter;
-		this.poËet=parameter2;
 		
-		root.getChildren().addAll(nadpis,vypis,kosik,info,typ,cena);
+		root.getChildren().addAll(nadpis,vypis,kosik,info,typ,cena,kupon,zmenCenu,odosli,datum);
 		
 		setPosition(vypis, 20, 55);//TextArea
 		setPosition(kosik, 20, 25);//Button - kosik
 		setPosition(nadpis, 150, 0);//Label -nadpis
 		setPosition(info, 70, 25);//Button -pre typ kontajnerov
 		setPosition(typ, 150, 25);//ComboBox
-		setPosition(cena, 275, 25);//Button - zobrazÌ cenu kontajnerov
+		setPosition(cena, 290, 25);//Button - zobrazÌ cenu kontajnerov
+		setPosition(kupon, 290, 55);
+		setPosition(zmenCenu, 290, 85);
+		setPosition(odosli, 290, 125);
+		setPosition(datum, 150, 375);
 		
 		nadpis.setId("Header3");
+		kupon.setPrefWidth(60);
+		kupon.setPromptText("KÛd");
 		
 		typ.getItems().addAll("UbytovacÌ", "Transportn˝", "N·drû", "Mraziarensk˝");
+		typ.setPromptText("Typ");
 		
 		vypis.setEditable(false);
 		vypis.setPrefSize(250, 270);
@@ -82,6 +95,53 @@ public class Third extends Stage {
 			
 			vypis.clear();
 			vypis.appendText(objedn·vka.ObjednavkaInfo());
+		});
+		
+		odosli.setOnAction(e->{
+			vypis.appendText("\n" + "PoËet vozidiel: " + Integer.toString(objedn·vka.NalozKontajnery(objedn·vka.getVzdialenost())));
+			//posunie d·tum
+			date = date.plusDays(objedn·vka.getPocetDni());
+			//System.out.println(date);//////////////////////////////////////////////////////////////////
+			datum.setText("Objedn·vka dorazÌ:  " + date.format(DateTimeFormatter.ofPattern("dd.MM.y")));
+			date=LocalDate.now();
+		});
+		
+		
+		zmenCenu.setOnAction(e->{
+			try {
+				if(objedn·vka.zlavovyKupon(kupon.getText())){
+					Alert b = new Alert(AlertType.INFORMATION);
+					
+					b.setTitle("PotvrdenÈ");
+					b.setHeaderText("KupÛn");
+					b.setContentText("Zæavov˝ kupÛn uplatnen˝");
+					b.show();
+					
+					boolean pom = objedn·vka.zlavovyKupon(kupon.getText());//prerobiù eöte na dve funkcie
+					kupon.clear();
+					vypis.clear();
+					vypis.appendText("Cena: " + Integer.toString(objedn·vka.getTotalCena()));
+				}
+				else{
+					Alert b = new Alert(AlertType.INFORMATION);
+					
+					b.setTitle("Chyba");
+					b.setHeaderText("KupÛn");
+					b.setContentText("Zæavov˝ kupÛn je neplatn˝");
+					b.show();
+					kupon.clear();
+				}
+				
+			} catch (Exception e2) {
+				Alert b = new Alert(AlertType.INFORMATION);
+				
+				b.setTitle("Chyba");
+				b.setHeaderText("Error!");
+				b.setContentText("NeplatnÈ ˙daje");
+				b.show();
+				kupon.clear();
+			}
+			
 		});
 		
 		info.setOnAction(e->{

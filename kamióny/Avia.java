@@ -16,12 +16,6 @@ public class Avia extends Auto implements Export {
 		super.nalozAuto(kontajner);
 	}
 	
-	public int exportTime(int vzdialenost){
-		
-		this.cas = vzdialenost/rychlost;
-		return cas;
-	}
-	
 
 	@Override
 	public int ExportTime(int vzdialenost) {

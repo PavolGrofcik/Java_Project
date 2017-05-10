@@ -94,7 +94,8 @@ public class Second extends Stage {
 				chyba.show();
 			}
 			else{
-				new Third(objednávka,poèet);
+				new Third(objednávka);
+				close();
 			}
 			
 		});
