@@ -2,6 +2,10 @@ package containers;
 
 public class Transportný extends Kontajner implements Atributy {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final int hmotnost = 1000;			//kg
 	private  int zaruka =5;						//roky
 

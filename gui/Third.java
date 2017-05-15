@@ -3,11 +3,14 @@ package gui;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import org.omg.CORBA.TIMEOUT;
+
 import containers.Ubytovací;
 import controller.NespravnyRozsah;
 import controller.ObjectNotFound;
 import controller.Objednávka;
 import controller.Poèet;
+import javafx.animation.PauseTransition;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -20,9 +23,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
-public class Third extends Stage {
+public class Third extends Stage  {
 	
 	private Label datum = new Label();
 	private Label nadpis = new Label("U len krok k odoslaniu...");
@@ -32,8 +37,9 @@ public class Third extends Stage {
 	private Button kosik = new Button("Košík");
 	private Button info = new Button("Zobraz info");
 	private Button cena = new Button("Cena");
-	private Button zmenCenu = new Button("Kúpon");
+	private Button zmenCenu = new Button("Kupón");
 	private Button odosli = new Button("Odosla");
+
 	
 	private TextField kupon = new TextField();
 	
@@ -42,6 +48,8 @@ public class Third extends Stage {
 	
 	private Objednávka objednávka;
 	
+	private int pom =0;
+	private int num =0;
 	//Generic method for Nodes
 		public void setPosition(Node node, int x, int y){
 			
@@ -79,8 +87,9 @@ public class Third extends Stage {
 		setPosition(kupon, 290, 55);
 		setPosition(zmenCenu, 290, 85);
 		setPosition(odosli, 290, 125);
-		setPosition(datum, 150, 375);
+		setPosition(datum, 140, 375);
 		
+		datum.setId("Datum");
 		nadpis.setId("Header3");
 		kupon.setPrefWidth(60);
 		kupon.setPromptText("Kód");
@@ -92,54 +101,61 @@ public class Third extends Stage {
 		vypis.setPrefSize(250, 270);
 		
 		cena.setOnAction(e->{
-			
+			if(num == 0){
 			vypis.clear();
 			vypis.appendText(objednávka.ObjednavkaInfo());
+			num++;
+			}
+			else {
+				vypis.clear();
+				vypis.appendText("**********\nMesto: " + objednávka.getMesto() + "\n" + "Vzdialenos: " + Integer.toString(objednávka.getVzdialenost()) +
+						"\n" + "Cena: " + Integer.toString(objednávka.getTotalCena()) + "\n" + "Poèet dní: " + Integer.toString(objednávka.getPocetDni()) + 
+						"\n" + "Poèet Kontajnerov: " + Integer.toString(objednávka.getPocetKontajnerov()));
+			}
 		});
 		
 		odosli.setOnAction(e->{
-			vypis.appendText("\n" + "Poèet vozidiel: " + Integer.toString(objednávka.NalozKontajnery(objednávka.getVzdialenost())));
-			//posunie dátum
+			
+			vypis.clear();
+			vypis.appendText("Poèet vozidiel: " + Integer.toString(objednávka.NalozKontajnery(objednávka.getVzdialenost())) + "\n" + "Poèet Kontajnerov: " + Integer.toString(objednávka.zistiPoèet()) + "\n" +
+			"Celkovı èas s Exportom: " + Integer.toString(objednávka.getPocetDni()) + "\n" +  "Ïakujeme za vašu objednávku" + "\n" + "Ukonèite aplikáciu");
+			nadpis.setText("Objednávka bola spracovaná");
+			//posunie dátum o produkènı èas
 			date = date.plusDays(objednávka.getPocetDni());
-			//System.out.println(date);//////////////////////////////////////////////////////////////////
 			datum.setText("Objednávka dorazí:  " + date.format(DateTimeFormatter.ofPattern("dd.MM.y")));
 			date=LocalDate.now();
+			
+			//Vypne program po 3 sekundách odkliknutí tlaèidla odosli
+			/*PauseTransition delay = new PauseTransition(Duration.seconds(4));
+			delay.setOnFinished( event -> close() );
+			delay.play();*/
+			
+			try {
+				Thread.sleep(5000);
+				hide();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		});
 		
-		
 		zmenCenu.setOnAction(e->{
-			try {
-				if(objednávka.zlavovyKupon(kupon.getText())){
-					Alert b = new Alert(AlertType.INFORMATION);
-					
-					b.setTitle("Potvrdené");
-					b.setHeaderText("Kupón");
-					b.setContentText("Z¾avovı kupón uplatnenı");
-					b.show();
-					
-					boolean pom = objednávka.zlavovyKupon(kupon.getText());//prerobi ešte na dve funkcie
-					kupon.clear();
-					vypis.clear();
-					vypis.appendText("Cena: " + Integer.toString(objednávka.getTotalCena()));
-				}
-				else{
-					Alert b = new Alert(AlertType.INFORMATION);
-					
-					b.setTitle("Chyba");
-					b.setHeaderText("Kupón");
-					b.setContentText("Z¾avovı kupón je neplatnı");
-					b.show();
-					kupon.clear();
-				}
-				
-			} catch (Exception e2) {
-				Alert b = new Alert(AlertType.INFORMATION);
-				
-				b.setTitle("Chyba");
-				b.setHeaderText("Error!");
-				b.setContentText("Neplatné údaje");
-				b.show();
+			
+			 if (pom == 0 && objednávka.zlavovyKupon(kupon.getText())!=0) {
+				vypis.clear();
+				vypis.appendText("Nová cena: " + Integer.toString(objednávka.zlavovyKupon(kupon.getText())));
 				kupon.clear();
+				pom++;
+			}
+			else{
+				Alert alert = new Alert(AlertType.INFORMATION);
+				
+				vypis.clear();
+				kupon.clear();
+				alert.setTitle("Chyba");
+				alert.setHeaderText("");
+				alert.setContentText("Nesprávny kupón");
+				alert.show();
 			}
 			
 		});
@@ -179,7 +195,7 @@ public class Third extends Stage {
 			vypis.appendText(zobrazObjednavku(objednávka, "Transportnı"));
 			vypis.appendText(zobrazObjednavku(objednávka, "Nádr"));
 			vypis.appendText(zobrazObjednavku(objednávka, "Mraziarenskı"));
-			vypis.appendText("Poèet Kontajnerov: " + Integer.toString(objednávka.zistiPoèet()));
+			//vypis.appendText("Poèet Kontajnerov: " + Integer.toString(objednávka.zistiPoèet()));
 			
 		});
 		

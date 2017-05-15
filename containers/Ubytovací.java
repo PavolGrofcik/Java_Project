@@ -3,6 +3,10 @@ package containers;
 
 public class Ubytovací extends Kontajner {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final int hmotnost = 5000;			//kg
 	private  int zaruka =10;					//roky
 	

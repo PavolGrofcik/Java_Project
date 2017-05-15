@@ -1,6 +1,5 @@
 package controller;
 
-import java.beans.Transient;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,14 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.PrimitiveIterator.OfDouble;
-
-import javax.annotation.Resource;
-import javax.swing.table.TableModel;
-
-import org.omg.CORBA.INV_FLAG;
 
 import containers.Kontajner;
 import containers.Mraziarenskı;
@@ -28,10 +19,13 @@ import kamióny.Avia;
 import kamióny.Kamión;
 import kamióny.Prives;
 
+/**
+ * 
+ * @author Pavol Grofèík
+ *
+ */
+
 public class Objednávka implements Serializable{
-	/**
-	 * Author Pavol Grofèík
-	 */
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -44,7 +38,7 @@ public class Objednávka implements Serializable{
 	private String Kraj=null;
 	private String Mesto=null;
 
-	private String[] kupon = {"0000", "1111", "2222", "123456789"};											//Zlavovı kupón ktorı obsahuje akceptujúce hodnoty	kupónov									
+	private String[] kupon = {"0000", "1111", "2222", "3333"};												//Zlavovı kupón ktorı obsahuje akceptujúce hodnoty rôznych kupónov									
 	
 	
 	private ArrayList<Kontajner> myList = ListCreator.Listcreate();
@@ -83,28 +77,27 @@ public class Objednávka implements Serializable{
 	public void setPocetDni(int num){
 		this.PocetDni+=num;
 	}
-	
+	/*
 	public void setCena(){
 		TotalCena = (int) (TotalCena * 0.9);
-	}
+		
+	}*/
 
-	//znii cenu o 5 %
-	public boolean zlavovyKupon(String kupon){
+	//znii cenu o 10%
+	public int zlavovyKupon(String kupon){
 		String pom=null;
 		
 		for(int i=0;i<this.kupon.length;i++){
 			pom= this.kupon[i];
 			if(pom.equals(kupon)){
-				
-				setCena();
-				//this.TotalCena*=0.95;
-				return true;
+				TotalCena= (int) (TotalCena*0.9);
+				return TotalCena;
 			}
 		}
-		return false;
+		return 0;
 	}
 	
-	public void kalibrujPocetKonAndAut(){
+	public void kalibrujPocetKonAut(){
 		if(PocetKontajnerov>30){
 			int pom = PocetKontajnerov-30;
 			try {
@@ -132,13 +125,13 @@ public class Objednávka implements Serializable{
 		
 		//Najprv nakalibruje poèet kontajnerov a áut
 		//automatickı prida
-		kalibrujPocetKonAndAut();
+		kalibrujPocetKonAut();
 		
 		//pre tuto vzdialenost sa v prvorade vyuijú avie, kvôli tomu e odväzú menej a majú aj menšiu rıchlos
 		if (vzdialenost < 200) {
 			//aktualizácia total pocet dni
 			setPocetDni(2);
-			//PocetDni = PocetDni + 2;
+			
 			for (int j = 0; j < cars.size(); j++) {
 				auto = cars.get(j);
 
@@ -216,7 +209,7 @@ public class Objednávka implements Serializable{
 			}
 
 		} else /* if(vzdialenost>=200) */ {
-			//this.PocetDni +=3;
+			
 			setPocetDni(3);
 			
 			if(number!=PocetKontajnerov){
@@ -511,7 +504,7 @@ public class Objednávka implements Serializable{
 			
 			pomocny=myList.get(i);																				//priradenie kontajneru v liste s indexom i do pomocnej premenej, odkial dostaneme poadované informácie
 			
-			//Prehladavanie pommocou názvu kontajnera, vyuitím funkcie substring ktorá vracia runtime nazov od zac indexu do end indexu, viï oracle.docs....
+			//Prehladavanie pomocou názvu kontajnera, vyuitím funkcie substring ktorá vracia runtime nazov od zac indexu do end indexu, viï oracle.docs....
 			
 			//Nádr
 			if(pomocny.toString().substring(11, 16).equals(typ)){
@@ -540,9 +533,9 @@ public class Objednávka implements Serializable{
 	
 	public String ObjednavkaInfo(){
 		
-		//Zobrazí podrobné informácie o 
-		return "Mesto: " + Mesto + "\n" + "Vzdialenos " + Integer.toString(Vzdialenost) +  " km" + "\n" + "Celková cena: " + Integer.toString(zistiCenu(this))+ " €" + "\n" + "Produkènı èas: "
-		+ Integer.toString(zistiPocetDni(this)) + " Dní";
+		//Zobrazí podrobné informácie o objednávke
+		return "************\nMesto: " + Mesto + "\n" + "Vzdialenos: " + Integer.toString(Vzdialenost) + " km" + "\n" + "Trieda: " + Trieda + "\n" + "Celkovı èas: " + Integer.toString(zistiPocetDni(this)) + " Dní" + "\n" +
+				"Celková cena: " + Integer.toString(zistiCenu())+ " €" + "\n";
 	}
 	
 	
@@ -599,17 +592,18 @@ public class Objednávka implements Serializable{
 		}
 	}
 
-	public int zistiCenu(Objednávka list){	
+	private int zistiCenu(){	
 		//funkcia zisti celkovu cenu kontajnerov
 		int sum=0;
 		Kontajner kontajner;
 		
-		for (int i = 0; i <list.myList.size(); i++) {
-			kontajner= list.myList.get(i);
+		for (int i = 0; i <myList.size(); i++) {
+			kontajner= myList.get(i);
 			sum+=kontajner.zistiCenu();
+			System.out.println(TotalCena);
 			TotalCena+=sum;																							//Uloí celkovú cenu do premennej TotalCena ktorá bude slúi na finalizáciu objednávky
 		}
-		return sum;
+		return TotalCena;
 	}
 	
 	public int zistiCas(Objednávka list){
@@ -630,12 +624,11 @@ public class Objednávka implements Serializable{
 		int tyzdne=0;
 		
 		if(Trieda.equals("1.")){
-			addCena(200);
 			dni = (int) zistiCas(list)/24;																		//volanie metódy zisti cas, ktorá vráti celkovı èas a naslédne sa vydeli konštantou 24 aby sa zistil
 			tyzdne=dni/7;
 			this.PocetDni+=dni; 																				//Pripoèíta k celkovım dnom vıroby
 			dni-=(tyzdne*2);
-			return dni;																				//Prvá trieda sa produkuje nonstop 7D/24H, teda aj cez víkend
+			return dni;																							//Prvá trieda sa produkuje nonstop 7D/24H, teda aj cez víkend
 		}
 		else{
 			dni = (int) zistiCas(list)/24;
@@ -652,7 +645,7 @@ public class Objednávka implements Serializable{
 	}
 	
 	public int getTotalCena(){
-		return this.TotalCena;
+		return TotalCena;
 	}
 
 	public void addCena(int delta){
@@ -699,4 +692,7 @@ public class Objednávka implements Serializable{
 		return this.Vzdialenost;
 	}
 	
+	public String getMesto(){
+		return Mesto;
+	}
 }

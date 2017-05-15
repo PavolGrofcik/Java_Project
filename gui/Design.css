@@ -2,7 +2,6 @@
 #Date{
 	-fx-text-fill: #6666ff;
 	-fx-font-size: 20px;
-	/*-fx-font-weight: bold;*/
 	-fx-font-family: Lucida Sans Unicode;
 }
 
@@ -58,5 +57,10 @@
 #Header3{
 	-fx-font-size:15px;
 	-fx-text-fill:#ff9900;
+}
+#Datum{
+	-fx-text-fill: #ff1a1a;
+	-fx-font-size: 13px;
+	-fx-font-weight: bold;
 }
 

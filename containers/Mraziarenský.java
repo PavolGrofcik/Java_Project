@@ -2,6 +2,10 @@ package containers;
 
 public class Mraziarenský extends Kontajner implements Atributy {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int range;
 	private String name;
 	

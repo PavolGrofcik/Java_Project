@@ -2,17 +2,29 @@ package containers;
 
 import java.io.Serializable;
 
+/**
+ * 
+ * Abstraktná trieda slúžiaca ako vzor pre konkrétne typy kontajerov s abstraktnými metódami
+ *
+ */
+
 public abstract class Kontajner implements Serializable{
 	
 	protected int cena;
 	protected int prodtime;
 	
-	
+	/**
+	 * 
+	 * @return cena kontajnera
+	 */
 	public  int zistiCenu(){											//zisti cenu každeho kontajneru
 		
 		return this.cena;
 	}
-	
+	/**
+	 * 
+	 * @return produkèný èas
+	 */
 	public int zistiCas(){												//zisti produkèny èas daneho kontajnera
 		
 		return this.prodtime;

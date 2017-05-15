@@ -1,6 +1,10 @@
 package containers;
 
 public class Nádrž extends Kontajner implements Atributy {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private  int zaruka =7;					//roky
 	private final int hmotnost = 1500;
 	

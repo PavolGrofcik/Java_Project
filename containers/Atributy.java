@@ -1,5 +1,9 @@
 package containers;
-
+/**
+ * 
+ * Interface, obsahuje spoloèné metódy pre každý typ kontajnera
+ *
+ */
 public interface Atributy {
 	
 	
