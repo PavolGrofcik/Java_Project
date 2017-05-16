@@ -1,13 +1,20 @@
 package controller;
 
-
-import java.awt.Window.Type;
 import java.util.ArrayList;
+/**
+ * 
+ * @author Pavol Grofèík
+ * Trieda urèená na vytvorenie ArrayListu podåa parametra
+ */
 
 public class ListCreator{
 	
-	//Generická metóda na vytvorenie Listu pre ukladanie objetkov rôzneho typu
-	public static <T> ArrayList<T> Listcreate(){
+	/**
+	 * Metóda slúžiaca na vytvorenie ArrayList-u
+	 * @return Objekt ArrayList slúžiaci na serializáciu objektov daného typu
+	 * @param T Všeobecný parameter
+	 */
+	public static <T> ArrayList<T> Listcreate(){															//Generická metóda na vytvorenie ArrayList-u pre ukladanie objetkov daného typu
 	
 		return new ArrayList<>();
 	}

@@ -2,19 +2,12 @@ package gui;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
-import org.omg.CORBA.TIMEOUT;
-
-import containers.Ubytovací;
-import controller.NespravnyRozsah;
 import controller.ObjectNotFound;
 import controller.Objednávka;
-import controller.Poèet;
 import javafx.animation.PauseTransition;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
@@ -23,7 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -48,8 +40,10 @@ public class Third extends Stage  {
 	
 	private Objednávka objednávka;
 	
+	//pomocné premenné slúžiace len na overenie zlavového kupónu
 	private int pom =0;
 	private int num =0;
+	
 	//Generic method for Nodes
 		public void setPosition(Node node, int x, int y){
 			
@@ -108,8 +102,8 @@ public class Third extends Stage  {
 			}
 			else {
 				vypis.clear();
-				vypis.appendText("**********\nMesto: " + objednávka.getMesto() + "\n" + "Vzdialenos: " + Integer.toString(objednávka.getVzdialenost()) +
-						"\n" + "Cena: " + Integer.toString(objednávka.getTotalCena()) + "\n" + "Poèet dní: " + Integer.toString(objednávka.getPocetDni()) + 
+				vypis.appendText("**********\nMesto: " + objednávka.getMesto() + "\n" + "Vzdialenos: " + Integer.toString(objednávka.getVzdialenost()) + " km" +
+						"\n" + "Cena: " + Integer.toString(objednávka.getTotalCena()) + " €" + "\n" + "Poèet dní: " + Integer.toString(objednávka.getPocetDni()) + 
 						"\n" + "Poèet Kontajnerov: " + Integer.toString(objednávka.getPocetKontajnerov()));
 			}
 		});
@@ -125,32 +119,25 @@ public class Third extends Stage  {
 			datum.setText("Objednávka dorazí:  " + date.format(DateTimeFormatter.ofPattern("dd.MM.y")));
 			date=LocalDate.now();
 			
-			//Vypne program po 3 sekundách odkliknutí tlaèidla odosli
-			/*PauseTransition delay = new PauseTransition(Duration.seconds(4));
+			//Vypne program po 5 sekundách odkliknutím tlaèidla odosli
+			PauseTransition delay = new PauseTransition(Duration.seconds(6));
 			delay.setOnFinished( event -> close() );
-			delay.play();*/
+			delay.play();
 			
-			try {
-				Thread.sleep(5000);
-				hide();
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+		
 		});
 		
 		zmenCenu.setOnAction(e->{
 			
 			 if (pom == 0 && objednávka.zlavovyKupon(kupon.getText())!=0) {
 				vypis.clear();
-				vypis.appendText("Nová cena: " + Integer.toString(objednávka.zlavovyKupon(kupon.getText())));
+				vypis.appendText("Nová cena: " + Integer.toString(objednávka.zlavovyKupon(kupon.getText())) + "€");
 				kupon.clear();
 				pom++;
 			}
 			else{
 				Alert alert = new Alert(AlertType.INFORMATION);
 				
-				vypis.clear();
 				kupon.clear();
 				alert.setTitle("Chyba");
 				alert.setHeaderText("");

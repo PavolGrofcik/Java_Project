@@ -1,10 +1,8 @@
 package gui;
 
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-
 import controller.NesprávnyTypVozidla;
 import controller.Objednávka;
 import javafx.geometry.Pos;

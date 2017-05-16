@@ -13,10 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.*;
-import java.time.*;
 import java.time.format.*;
 
 public class Second extends Stage {
@@ -184,8 +181,6 @@ public class Second extends Stage {
 		
 		back.setOnAction(e -> { // Funkcia vracaj˙ca hlavne okno
 			
-			ButtonType buttonOk= new ButtonType("OK");
-			ButtonType buttonClose = new ButtonType("Close");
 			
 			Alert exit = new Alert(AlertType.CONFIRMATION);
 			exit.setTitle("UkonËiù?");

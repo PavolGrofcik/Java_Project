@@ -3,40 +3,52 @@ package containers;
 import java.io.Serializable;
 
 /**
+ * @author Pavol Grofèík
+ */
+
+/**
  * 
- * Abstraktná trieda slúiaca ako vzor pre konkrétne typy kontajerov s abstraktnımi metódami
+ * Abstraktná trieda slúiaca ako vzor pre konkrétne typy kontajerov so spoloènımi metódami a atribútmi
  *
  */
 
 public abstract class Kontajner implements Serializable{
-	
+	/**
+	 * Spoloèné atribúty cena a produkèny èas
+	 */
 	protected int cena;
 	protected int prodtime;
 	
 	/**
-	 * 
-	 * @return cena kontajnera
+	 * Metóda zistí aktuálnu cenu kontajnera
+	 * @return Cena  jedného kontajnera
 	 */
-	public  int zistiCenu(){											//zisti cenu kadeho kontajneru
+	public  int zistiCenu(){											//Zistí cenu kadého kontajneru
 		
 		return this.cena;
 	}
 	/**
-	 * 
-	 * @return produkènı èas
+	 * Metóda zistí aktuálny produkènı èas kontajnera
+	 * @return Produkènı èas jedného kontajnera
 	 */
-	public int zistiCas(){												//zisti produkèny èas daneho kontajnera
+	public int zistiCas(){												//Zistí produkènı èas daného kontajnera
 		
 		return this.prodtime;
 	}
 	
-	public abstract int zistiHmotnost();
+	/**
+	 * Overridden metóda
+	 * @return Hmotnos kontajnera
+	 */
+	public abstract int zistiHmotnost();								//Prekonávajúce metódy abstraktnej triedy
+	/**
+	 * Overridden metóda
+	 * @return Záruka kontajnera
+	 */
 	public abstract int zistiZaruku();
+	/**
+	 * Overridden metóda
+	 * @param mnozstvo Poèet kontajnerov
+	 */
 	public abstract void nastavCenu(int mnozstvo);		
 }
-
-
-//Odrátavat cas vyroby loading bar1, odratavat celkovı cas loading bar 2(including prodTime)
-//Na konci objednávky by sa dalo urobi nieèo ako zlavovı kupón, ktoré budú uloené vo File neake èísla ak sa neaké bude zhodova tak sa odráta 5% z celkovej ceny(simply checkbox.setOnAction(e->...setvisible field)
-// Pre jednu hierarchiu dedenia dorobi poriadne JavaDoc dokumentaciu aby to bolo zmysluplné 
-//Dorobi správu o realizácii prejekt  2-3 strany, jednoduchy popis ako ako ktroé triedy fungujú plus dorobi Class Diagram in UML, vysvetlenie vzahov

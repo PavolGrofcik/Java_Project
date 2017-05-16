@@ -125,9 +125,6 @@ public class MrazStage extends Stage {
 		
 		koniec.setOnAction(e -> {
 
-			ButtonType buttonOk = new ButtonType("OK");
-			ButtonType buttonCancel = new ButtonType("Cancel");
-
 			Alert info = new Alert(AlertType.CONFIRMATION);
 			info.setTitle("UkonËiù?");
 			info.setHeaderText("Chcete uloûiù a vr·tiù sa spaù?");

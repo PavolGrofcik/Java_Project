@@ -1,7 +1,7 @@
 package containers;
 /**
  * 
- * Interface, obsahuje spoloèné metódy pre kadı typ kontajnera
+ * Interface, obsahuje spoloèné metódy, ktoré su špecifické pre danı typ kontajnera, nemohli by zakomponované v abstraktnej triede
  *
  */
 public interface Atributy {

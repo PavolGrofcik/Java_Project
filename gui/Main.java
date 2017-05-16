@@ -2,13 +2,8 @@ package gui;
 
 import java.util.Optional;
 
-import javax.management.loading.PrivateClassLoader;
-
-import org.omg.CORBA.PUBLIC_MEMBER;
-
 import controller.Objedn·vka;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -22,7 +17,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -143,9 +137,6 @@ public class Main extends Application {
 			});
 			
 			exit.setOnAction(e -> {
-				
-				//ButtonType buttonOk = new ButtonType("OK");
-				//ButtonType buttonClose = new ButtonType("Cancel");
 
 				Alert exit = new Alert(AlertType.CONFIRMATION);		
 				exit.setTitle("UkonËiù?");

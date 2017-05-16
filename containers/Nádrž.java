@@ -1,18 +1,26 @@
 package containers;
-
+/**
+ * 
+ * @author Pavol GrofËÌk
+ *
+ */
 public class N·drû extends Kontajner implements Atributy {
 	/**
-	 * 
+	 * äpecifickÈ atrib˙ty pre N·drû
 	 */
 	private static final long serialVersionUID = 1L;
-	private  int zaruka =7;					//roky
+	private  int zaruka =7;																				//Roky
 	private final int hmotnost = 1500;
 	
-	private int Objem;						//objem v m3 kubick˝ch, max 7 m3
+	private int Objem;																					//Objem v m3 kubick˝ch, max 7 m3
 	private String Velkost;
 	
 	
-	//Constructor
+	/**
+	 * Konötruktor
+	 * @param num PoËet Kontajnerov
+	 * @param size Veækosù objemu Kontajnera
+	 */
 	public N·drû(int num, String size) {
 		
 		this.Velkost=size;
@@ -34,18 +42,28 @@ public class N·drû extends Kontajner implements Atributy {
 		}
 	}
 	
-	//MetÛda zmenÌ mnozstvo o dan˝ poËet
-	//number = zvolene mnozstvo, delta = o kolko zmenit, konötanta
-	public int zmenMnozstvo(int number, int delta){
+	/**
+	 * 
+	 * @param number	Aktu·lne mnoûstvo kontajnera
+	 * @param delta		ZmenÌ danÈ mnoûstvo kontajnera o poËet delta
+	 * @return			Nov· zmenen· hodnota
+	 */
+	public int zmenMnozstvo(int number, int delta){															//MetÛda zmenÌ mnozstvo o dan˝ poËet
+																											//Number = zvolene mnozstvo, delta = o kolko zmenit, konötanta
 		return number-delta;
 	}
 
-	
+	/**
+	 * @return Aktu·lna z·ruka
+	 */
 	@Override
 	public int zistiZaruku() {
 		return this.zaruka;
 	}
 
+	/**
+	 * NastavÌ cenu podæa mnoûstva kontajnerov, uplatnÌ zæavu pri v‰Ëöom mnoûstve
+	 */
 	@Override
 	public void nastavCenu(int mnozstvo) {
 		if(mnozstvo>5)
@@ -55,7 +73,11 @@ public class N·drû extends Kontajner implements Atributy {
 		}
 	}
 	
-	public void nastavProdT(int mnozstvo){										//podla mnoûstva sa  automaticky urËuje aj Ëas urËen˝ na produkciu jednotliv˝ch kontajnerov, ËÌm viac t˝m r˝chlejöie
+	/**
+	 * NastavÌ produkËn˝ Ëas, z·visiac od poËtu kontajnerov danÈho typu
+	 * @param mnozstvo PoËet Kontajnerov
+	 */
+	public void nastavProdT(int mnozstvo){										//Podla mnoûstva sa  automaticky urËuje aj Ëas urËen˝ na produkciu jednotliv˝ch kontajnerov, ËÌm viac t˝m r˝chlejöie
 		if (mnozstvo>5) {
 			this.prodtime=90;
 		}
@@ -64,7 +86,10 @@ public class N·drû extends Kontajner implements Atributy {
 		}
 	}
 
-	
+	/**
+	 * 
+	 * @param objem NastavÌ objem podæa zvolenej hodnoty
+	 */
 	public void nastavObjem(String objem){
 		
 		switch (objem) {
@@ -83,10 +108,17 @@ public class N·drû extends Kontajner implements Atributy {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return Aktu·lny objem
+	 */
 	public int zistiObjem(){
 		return this.Objem;
 	}
 
+	/**
+	 *@return Atu·lna hmotnosù
+	 */
 	@Override
 	public int zistiHmotnost() {
 		return this.hmotnost;

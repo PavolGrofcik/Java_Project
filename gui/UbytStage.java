@@ -17,7 +17,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Box;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -128,9 +127,7 @@ public class UbytStage extends Stage{
 		
 		
 		back.setOnAction(e->{
-			ButtonType buttonOk= new ButtonType("OK");
-			ButtonType buttonClose = new ButtonType("Close");
-			
+
 			Alert exit = new Alert(AlertType.CONFIRMATION);
 			exit.setTitle("UkonËiù?");
 			exit.setHeaderText("Chcete uloûiù a vr·tiù sa sp‰ù?");

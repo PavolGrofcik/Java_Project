@@ -77,8 +77,6 @@ public class NadrûStage extends Stage {
 		});
 		
 		back.setOnAction(e->{
-			ButtonType buttonOk= new ButtonType("OK");
-			ButtonType buttonClose = new ButtonType("Close");
 			
 			Alert exit = new Alert(AlertType.CONFIRMATION);
 			exit.setTitle("UkonËiù?");
